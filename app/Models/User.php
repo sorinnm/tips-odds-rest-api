@@ -12,6 +12,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const READ_API = 'read-api';
+    const WRITE_API = 'write-api';
+
     /**
      * The attributes that are mass assignable.
      *
