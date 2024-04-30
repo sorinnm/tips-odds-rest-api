@@ -8,9 +8,14 @@ use Illuminate\Support\Facades\DB;
 
 class FixtureController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $fixtures = Fixtures::all();
+        $paginate = $request->get('paginate');
+
+        if (empty($paginate)) {
+            return response()->json("Please use a paginate parameter", 400);
+        }
+        $fixtures = Fixtures::paginate($paginate);
         return response()->json($fixtures);
     }
 
@@ -19,7 +24,7 @@ class FixtureController extends Controller
         $saved = false;
 
         // Before creating a new fixture, try to find an existing one
-        $fixtures = Fixtures::all();
+        $fixtures = Fixtures::all()->paginate(10);
         $fixture = $fixtures->firstWhere('fixture_id', $request->fixture_id);
 
         if (empty($fixture)) {
