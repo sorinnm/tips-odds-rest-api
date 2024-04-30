@@ -9,4 +9,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/fixtures', [FixtureController::class, 'index']);
+Route::get('/fixtures/{id}', [FixtureController::class, 'show']);
+Route::delete('/fixtures/{id}', [FixtureController::class, 'delete']);
 Route::post('/fixtures', [FixtureController::class, 'save']);
+Route::post('/json-escaper', [FixtureController::class, 'escape']);

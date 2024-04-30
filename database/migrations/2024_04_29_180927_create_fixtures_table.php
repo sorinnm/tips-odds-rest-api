@@ -23,7 +23,8 @@ return new class extends Migration
             $table->longText('head_to_head')->nullable();
             $table->longText('bets')->nullable();
             $table->enum('status', ['pending', 'running', 'complete'])->default('pending');
-            $table->timestampsTz();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
 
             $table->index('fixture_id');
         });
