@@ -33,7 +33,7 @@ class FixtureController extends Controller
 
         $columns = $request->keys();
         foreach ($columns as $column) {
-            $fixture->$column = $request->$column;
+            $fixture->$column = json_encode($request->$column);
         }
 
         $saved = $fixture->save();
