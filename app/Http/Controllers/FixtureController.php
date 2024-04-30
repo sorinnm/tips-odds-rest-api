@@ -24,7 +24,7 @@ class FixtureController extends Controller
         $saved = false;
 
         // Before creating a new fixture, try to find an existing one
-        $fixtures = Fixtures::all()->paginate(10);
+        $fixtures = Fixtures::all();
         $fixture = $fixtures->firstWhere('fixture_id', $request->fixture_id);
 
         if (empty($fixture)) {

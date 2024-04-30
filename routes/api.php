@@ -4,9 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FixtureController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+//Route::post('/tokens/create', function (Request $request) {
+//    return $request->user()->createToken('token-name', ['server:update'])->plainTextToken;
+//})->middleware('auth:sanctum');
 
 Route::get('/fixtures', [FixtureController::class, 'index']);
 Route::get('/fixtures/{id}', [FixtureController::class, 'show']);
