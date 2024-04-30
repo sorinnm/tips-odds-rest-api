@@ -51,7 +51,6 @@ class FixtureController extends Controller
     public function show($id)
     {
         $fixtures = Fixtures::all();
-        $fixtures->where('fixture_id', $id)->delete();
         return response()->json($fixtures->where('fixture_id', $id));
     }
 
