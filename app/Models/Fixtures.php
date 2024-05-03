@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
+use Illuminate\Support\Traits\EnumeratesValues;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -24,10 +25,12 @@ class Fixtures extends Model
     protected $fillable = ['fixture_id', 'fixtures', 'standings', 'home_team_squad', 'away_team_squad', 'injuries', 'predictions', 'head_to_head', 'bets', 'status', 'created_at', 'updated_at'];
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|void
+     * @param int $leagueId
+     * @param int $seasonId
+     * @param string $round
+     * @return false|mixed|void
      */
-    public function getFixtureLeague(Request $request)
+    public function getFixtureLeague(int $leagueId, int $seasonId, string $round)
     {
         $fixturesLeague = false;
 
@@ -36,9 +39,9 @@ class Fixtures extends Model
                 'x-apisports-key' => env('X_RAPIDAPI_KEY'),
                 'Accept' => 'application/json'
             ])->get(env('X_RAPIDAPI_HOST') . self::API_ENDPOINT_FIXTURES, [
-                'league' => $request->get('league'),
-                'season' => $request->get('season'),
-                'round' => $request->get('round'),
+                'league' => $leagueId,
+                'season' => $seasonId,
+                'round' => $round,
             ]);
 
             Log::debug("FIXTURE_LEAGUE: " . $response->status());
@@ -122,11 +125,12 @@ class Fixtures extends Model
     }
 
     /**
-     * @param Request $request
+     * @param int $leagueId
+     * @param int $seasonId
      * @param int $fixtureId
-     * @return mixed|void
+     * @return false|mixed|void
      */
-    public function getInjuries(Request $request, int $fixtureId)
+    public function getInjuries(int $leagueId, int $seasonId, int $fixtureId)
     {
         $injuries = false;
 
@@ -135,8 +139,8 @@ class Fixtures extends Model
                 'x-apisports-key' => env('X_RAPIDAPI_KEY'),
                 'Accept' => 'application/json'
             ])->get(env('X_RAPIDAPI_HOST') . self::API_ENDPOINT_INJURIES, [
-                'league' => $request->get('league'),
-                'season' => $request->get('season'),
+                'league' => $leagueId,
+                'season' => $seasonId,
                 'fixture' => $fixtureId
             ]);
 
@@ -212,11 +216,11 @@ class Fixtures extends Model
     }
 
     /**
-     * @param Request $request
+     * @param int $bookmakerId
      * @param int $fixtureId
      * @return mixed|void
      */
-    public function getBets(Request $request, int $fixtureId)
+    public function getBets(int $bookmakerId, int $fixtureId)
     {
         $bets = false;
 
@@ -225,7 +229,7 @@ class Fixtures extends Model
                 'x-apisports-key' => env('X_RAPIDAPI_KEY'),
                 'Accept' => 'application/json'
             ])->get(env('X_RAPIDAPI_HOST') . self::API_ENDPOINT_BETS, [
-                'bookmaker' => $request->get('bookmaker'),
+                'bookmaker' => $bookmakerId,
                 'fixture' => $fixtureId
             ]);
 
@@ -264,5 +268,31 @@ class Fixtures extends Model
         }
 
         return $fixture->save();
+    }
+
+    /**
+     * @param int $leagueId
+     * @param int $seasonId
+     * @param string $round
+     * @return Collection
+     */
+    public function getAll(int $leagueId, int $seasonId, string $round): Collection
+    {
+        return Fixtures::all()
+            ->where('league_id', $leagueId)
+            ->where('season_id', $seasonId)
+            ->where('round', $round)
+            ->where('status', '=', 'pending');
+    }
+
+    /**
+     * @param int $fixtureId
+     * @return Collection
+     */
+    public function getById(int $fixtureId): Collection
+    {
+        return Fixtures::all()
+            ->where('fixture_id', $fixtureId)
+            ->where('status', '=', 'pending');
     }
 }

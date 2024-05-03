@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FixtureController;
+use App\Http\Controllers\TextGenerationController;
 
 Route::post('/auth/register', [AuthController::class, 'createUser']);
 Route::post('/login', [AuthController::class, 'loginUser']);
@@ -14,3 +15,6 @@ Route::post('/json-escaper', [FixtureController::class, 'escape'])->middleware([
 
 // API FOOTBALL
 Route::post('/fixtures', [FixtureController::class, 'storeFixturesAllData'])->middleware(['auth:sanctum', 'ability:read-api,write-api']);
+
+// ChatGPT - text generation
+Route::post('/generate', [TextGenerationController::class, 'index'])->middleware(['auth:sanctum', 'ability:read-api,write-api']);

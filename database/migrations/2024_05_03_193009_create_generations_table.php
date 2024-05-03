@@ -11,19 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fixtures', function (Blueprint $table) {
+        Schema::create('generations', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('fixture_id')->index('FIXTURE_ID');
-            $table->integer('league_id')->index('LEAGUE_ID');
-            $table->integer('season_id')->index('SEASON_ID');
-            $table->string('round')->index('ROUND');
-            $table->longText('fixtures')->nullable();
-            $table->longText('home_team_squad')->nullable();
-            $table->longText('away_team_squad')->nullable();
-            $table->longText('injuries')->nullable();
-            $table->longText('predictions')->nullable();
-            $table->longText('head_to_head')->nullable();
-            $table->longText('bets')->nullable();
+            $table->longText('generation')->nullable();
             $table->enum('status', ['pending', 'running', 'retry', 'error', 'complete'])->default('pending');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
@@ -35,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fixtures');
+        Schema::dropIfExists('generations');
     }
 };

@@ -73,4 +73,18 @@ class Standings extends Model
 
         return $standings->save();
     }
+
+    /**
+     * @param int $leagueId
+     * @param int $seasonId
+     * @param string $round
+     * @return Standings
+     */
+    public function retrieveStandings(int $leagueId, int $seasonId, string $round): Standings
+    {
+        return Standings::all()
+            ->where('league_id', $leagueId)
+            ->where('season_id', $seasonId)
+            ->where('round', $round)->first();
+    }
 }

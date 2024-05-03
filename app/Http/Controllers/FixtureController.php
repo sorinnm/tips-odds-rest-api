@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\Fixtures;
 use App\Models\Standings;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 
 class FixtureController extends Controller
 {
@@ -41,7 +40,7 @@ class FixtureController extends Controller
 
         // Before creating a new fixture, try to find an existing one
         $fixtures = Fixtures::all();
-        $fixture = $fixtures->firstWhere('fixture_id', $request->fixture_id);
+        $fixture = $fixtures->firstWhere('fixture_id', $request->get('fixture_id'));
 
         if (empty($fixture)) {
             $fixture = new Fixtures;
@@ -107,8 +106,9 @@ class FixtureController extends Controller
         $leagueId = (int) $request->get('league');
         $seasonId = (int) $request->get('season');
         $round = (string) $request->get('round');
+        $bookmakerId = (string) $request->get('bookmaker');
 
-        $fixturesLeague = (array) $this->fixtures->getFixtureLeague($request);
+        $fixturesLeague = (array) $this->fixtures->getFixtureLeague($leagueId, $seasonId, $round);
 
         $data = [
             'fixtures' => ['total' => 0],
@@ -146,6 +146,9 @@ class FixtureController extends Controller
             $fixtureMatch = $this->fixtures->getFixtureMatch($fixtureId);
             $saved = $this->fixtures->store([
                 'fixture_id' => $fixtureId,
+                'league_id' => $leagueId,
+                'season_id' => $seasonId,
+                'round' => $round,
                 'fixtures' => json_encode($fixtureMatch)
             ]);
 
@@ -179,7 +182,7 @@ class FixtureController extends Controller
             }
 
             // Get injuries and save
-            $injuries = $this->fixtures->getInjuries($request, $fixtureId);
+            $injuries = $this->fixtures->getInjuries($leagueId, $seasonId, $fixtureId);
             $saved = $this->fixtures->store([
                 'fixture_id' => $fixtureId,
                 'injuries' => json_encode($injuries)
@@ -215,7 +218,7 @@ class FixtureController extends Controller
             }
 
             // Get bets and save
-            $bets = $this->fixtures->getBets($request, $fixtureId);
+            $bets = $this->fixtures->getBets($bookmakerId, $fixtureId);
             $saved = $this->fixtures->store([
                 'fixture_id' => $fixtureId,
                 'bets' => json_encode($bets)
