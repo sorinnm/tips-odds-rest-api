@@ -13,16 +13,15 @@ return new class extends Migration
     {
         Schema::create('fixtures', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('fixture_id');
+            $table->integer('fixture_id')->index('FIXTURE_ID');
             $table->longText('fixtures')->nullable();
-            $table->longText('standings')->nullable();
             $table->longText('home_team_squad')->nullable();
             $table->longText('away_team_squad')->nullable();
             $table->longText('injuries')->nullable();
             $table->longText('predictions')->nullable();
             $table->longText('head_to_head')->nullable();
             $table->longText('bets')->nullable();
-            $table->enum('status', ['pending', 'running', 'complete'])->default('pending');
+            $table->enum('status', ['pending', 'running', 'retry', 'error', 'complete'])->default('pending');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
 
