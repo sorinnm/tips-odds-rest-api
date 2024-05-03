@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class TextGeneratorModel extends Model
+class TextGenerator extends Model
 {
     use HasFactory;
 
@@ -36,9 +36,11 @@ class TextGeneratorModel extends Model
                 if (!empty($data) && isset($data['choices'][0]['message']['content'])) {
                     $chatGPTResponse = $data['choices'][0]['message']['content'];
                 }
+            } else {
+                Log::error("[" . $payload['fixture_id'] . "] CHATGPT Text Generation: " . $response->status() . " >>> Message: " . $response->body());
             }
         } catch (\Throwable $th) {
-            Log::error($th->getMessage());
+            Log::error("[" . $payload['fixture_id'] . "] " . $th->getMessage() . " >>> Error: " . isset($response['error']['message']) ? $response['error']['message'] : $response->status());
         }
 
         return $chatGPTResponse;
@@ -51,11 +53,11 @@ class TextGeneratorModel extends Model
     public function store(array $data): bool
     {
         // Before creating a new generation, try to find an existing one
-        $generations = TextGeneratorModel::all();
+        $generations = TextGenerator::all();
         $generation = $generations->firstWhere('fixture_id', $data['fixture_id']);
 
         if (empty($fixture)) {
-            $generation = new TextGeneratorModel();
+            $generation = new TextGenerator();
         }
 
         foreach ($data as $column => $value) {
