@@ -10,5 +10,7 @@ Route::post('/login', [AuthController::class, 'loginUser']);
 Route::get('/fixtures', [FixtureController::class, 'index'])->middleware(['auth:sanctum', 'ability:read-api,write-api']);
 Route::get('/fixtures/{id}', [FixtureController::class, 'show'])->middleware(['auth:sanctum', 'ability:read-api,write-api']);
 Route::delete('/fixtures/{id}', [FixtureController::class, 'delete'])->middleware(['auth:sanctum', 'abilities:write-api']);
-Route::post('/fixtures', [FixtureController::class, 'save'])->middleware(['auth:sanctum', 'abilities:write-api']);
 Route::post('/json-escaper', [FixtureController::class, 'escape'])->middleware(['auth:sanctum', 'abilities:write-api']);
+
+// API FOOTBALL
+Route::post('/fixtures', [FixtureController::class, 'storeFixturesAllData'])->middleware(['auth:sanctum', 'ability:read-api,write-api']);
