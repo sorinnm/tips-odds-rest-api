@@ -19,6 +19,15 @@ class Fixtures extends Model
     const API_ENDPOINT_PREDICTIONS = '/predictions';
     const API_ENDPOINT_BETS = '/odds';
 
+    const DATA_TYPE_FIXTURES = 'fixtures';
+    const DATA_TYPE_HOME_TEAM_SQUAD = 'home_team_squad';
+    const DATA_TYPE_AWAY_TEAM_SQUAD = 'away_team_squad';
+    const DATA_TYPE_STANDINGS = 'standings';
+    const DATA_TYPE_PREDICTIONS = 'predictions';
+    const DATA_TYPE_INJURIES = 'injuries';
+    const DATA_TYPE_BETS = 'bets';
+    const DATA_TYPE_HEAD_TO_HEAD = 'head_to_head';
+
     protected array $head2head = [];
 
     protected $table = 'fixtures';
@@ -294,5 +303,61 @@ class Fixtures extends Model
         return Fixtures::all()
             ->where('fixture_id', $fixtureId)
             ->where('status', '=', 'pending');
+    }
+
+    /**
+     * @param array $json
+     * @param string $type
+     * @return array
+     */
+    public function cleanData(array $jsonArray, string $type): array
+    {
+        switch ($type) {
+            case self::DATA_TYPE_FIXTURES:
+                $keysToRemove = ['id', 'flag', 'logo', 'comments', 'players'];
+                $result = $this->removeKeys($jsonArray, $keysToRemove);
+                break;
+            case self::DATA_TYPE_HOME_TEAM_SQUAD|self::DATA_TYPE_AWAY_TEAM_SQUAD:
+                $keysToRemove = ['id', 'logo', 'photo'];
+                $result = $this->removeKeys($jsonArray, $keysToRemove);
+                break;
+            case self::DATA_TYPE_INJURIES:
+                $keysToRemove = ['id', 'logo', 'flag', 'photo'];
+                $result = $this->removeKeys($jsonArray, $keysToRemove);
+                break;
+            case self::DATA_TYPE_PREDICTIONS|self::DATA_TYPE_STANDINGS|self::DATA_TYPE_HEAD_TO_HEAD:
+                $keysToRemove = ['id', 'logo', 'flag'];
+                $result = $this->removeKeys($jsonArray, $keysToRemove);
+                break;
+            case self::DATA_TYPE_BETS:
+                $keysToRemove = ['id'];
+                $result = $this->removeKeys($jsonArray, $keysToRemove);
+                break;
+            default:
+                $result = $jsonArray;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Recursive function to remove specific keys from an array
+     *
+     * @param array $array
+     * @param array $keysToRemove
+     * @return array
+     */
+    private function removeKeys(array $array, array $keysToRemove): array {
+        foreach ($array as $key => &$value) {
+            // If the current key is in the list of keys to remove, unset it
+            if (in_array($key, $keysToRemove, true)) {
+                unset($array[$key]);
+            } elseif (is_array($value)) {
+                // If the value is an array, recurse
+                $value = $this->removeKeys($value, $keysToRemove);
+            }
+        }
+
+        return $array;
     }
 }

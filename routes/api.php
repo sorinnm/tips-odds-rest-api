@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\WordpressController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FixtureController;
 use App\Http\Controllers\TextGenerationController;
@@ -18,3 +19,7 @@ Route::post('/fixtures', [FixtureController::class, 'storeFixturesAllData'])->mi
 
 // ChatGPT - text generation
 Route::post('/generate', [TextGenerationController::class, 'index'])->middleware(['auth:sanctum', 'ability:read-api,write-api']);
+
+// WordPress post
+Route::post('/wordpress/post', [WordpressController::class, 'post'])->middleware(['auth:sanctum', 'ability:read-api,write-api']);
+

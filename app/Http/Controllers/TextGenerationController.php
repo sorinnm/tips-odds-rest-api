@@ -53,7 +53,7 @@ class TextGenerationController extends Controller
 
             $payload['messages'] = $messages;
 
-            $chatGPTResponse = $this->generatorModel->generateText($payload);
+            $chatGPTResponse = $this->generatorModel->generateText($payload, $fixture->fixture_id);
 
             if (!empty($chatGPTResponse)) {
                 $saved = $this->generatorModel->store([

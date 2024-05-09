@@ -123,6 +123,7 @@ class FixtureController extends Controller
 
         // Get standings and save
         $standings = $this->standings->getStandings($leagueId, $seasonId);
+        $standings = $this->fixtures->cleanData($standings, Fixtures::DATA_TYPE_STANDINGS);
         $saved = $this->standings->store([
             'league_id' => $leagueId,
             'season_id' => $seasonId,
@@ -131,7 +132,6 @@ class FixtureController extends Controller
         ]);
 
             if ($saved) {
-                $data['standings'] = $standings;
                 $data['standings']['league_id'] = $leagueId;
                 $data['standings']['season_id'] = $seasonId;
                 $data['standings']['round'] = $round;
@@ -144,6 +144,7 @@ class FixtureController extends Controller
 
             // Get fixtures and save
             $fixtureMatch = $this->fixtures->getFixtureMatch($fixtureId);
+            $fixtureMatch = $this->fixtures->cleanData($fixtureMatch, Fixtures::DATA_TYPE_FIXTURES);
             $saved = $this->fixtures->store([
                 'fixture_id' => $fixtureId,
                 'league_id' => $leagueId,
@@ -159,6 +160,7 @@ class FixtureController extends Controller
 
             // Get home team squad and save
             $homeTeamSquad = $this->fixtures->getSquads($homeTeamId);
+            $homeTeamSquad = $this->fixtures->cleanData($homeTeamSquad, Fixtures::DATA_TYPE_HOME_TEAM_SQUAD);
             $saved = $this->fixtures->store([
                 'fixture_id' => $fixtureId,
                 'home_team_squad' => json_encode($homeTeamSquad)
@@ -171,6 +173,7 @@ class FixtureController extends Controller
 
             // Get away team squad and save
             $awayTeamSquads = $this->fixtures->getSquads($awayTeamId);
+            $awayTeamSquads = $this->fixtures->cleanData($awayTeamSquads, Fixtures::DATA_TYPE_AWAY_TEAM_SQUAD);
             $saved = $this->fixtures->store([
                 'fixture_id' => $fixtureId,
                 'away_team_squad' => json_encode($awayTeamSquads)
@@ -183,6 +186,7 @@ class FixtureController extends Controller
 
             // Get injuries and save
             $injuries = $this->fixtures->getInjuries($leagueId, $seasonId, $fixtureId);
+            $injuries = $this->fixtures->cleanData($injuries, Fixtures::DATA_TYPE_INJURIES);
             $saved = $this->fixtures->store([
                 'fixture_id' => $fixtureId,
                 'injuries' => json_encode($injuries)
@@ -195,6 +199,7 @@ class FixtureController extends Controller
 
             // Get predictions and save
             $predictions = $this->fixtures->getPredictions($fixtureId);
+            $predictions = $this->fixtures->cleanData($predictions, Fixtures::DATA_TYPE_PREDICTIONS);
             $saved = $this->fixtures->store([
                 'fixture_id' => $fixtureId,
                 'predictions' => json_encode($predictions)
@@ -207,6 +212,7 @@ class FixtureController extends Controller
 
             // Get head to head and save
             $head2head = $this->fixtures->getHeadToHead($fixtureId);
+            $head2head = $this->fixtures->cleanData($head2head, Fixtures::DATA_TYPE_HEAD_TO_HEAD);
             $saved = $this->fixtures->store([
                 'fixture_id' => $fixtureId,
                 'head_to_head' => json_encode($head2head)
@@ -219,6 +225,7 @@ class FixtureController extends Controller
 
             // Get bets and save
             $bets = $this->fixtures->getBets($bookmakerId, $fixtureId);
+            $bets = $this->fixtures->cleanData($head2head, Fixtures::DATA_TYPE_BETS);
             $saved = $this->fixtures->store([
                 'fixture_id' => $fixtureId,
                 'bets' => json_encode($bets)
