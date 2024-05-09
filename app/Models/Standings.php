@@ -12,43 +12,8 @@ class Standings extends Model
 {
     use HasFactory;
 
-    const API_ENDPOINT_STANDINGS = '/standings';
-
     protected $table = 'standings';
     protected $fillable = ['league_id', 'season_id', 'round', 'standings', 'created_at', 'updated_at'];
-
-    /**
-     * @param Request $request
-     * @return mixed|void
-     */
-    public function getStandings(int $leagueId, int $seasonId)
-    {
-        $fixturesStandings = false;
-
-        try {
-            $response = Http::withHeaders([
-                'x-apisports-key' => env('X_RAPIDAPI_KEY'),
-                'Accept' => 'application/json'
-            ])->get(env('X_RAPIDAPI_HOST') . self::API_ENDPOINT_STANDINGS, [
-                'league' => $leagueId,
-                'season' => $seasonId
-            ]);
-
-            Log::debug("STANDINGS: " . $response->status());
-
-            if ($response->successful()) {
-                $data = $response->json();
-
-                if (!empty($data) && isset($data['response'])) {
-                    $fixturesStandings = $data['response'];
-                }
-            }
-
-            return $fixturesStandings;
-        } catch (\Throwable $th) {
-            Log::error($th->getMessage());
-        }
-    }
 
     /**
      * @param array $data
