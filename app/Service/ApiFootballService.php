@@ -19,6 +19,7 @@ class ApiFootballService
     const API_ENDPOINT_INJURIES = '/injuries';
     const API_ENDPOINT_PREDICTIONS = '/predictions';
     const API_ENDPOINT_BETS = '/odds';
+    const API_ENDPOINT_ROUND = '/fixtures/rounds';
 
     const DATA_TYPE_FIXTURES = 'fixtures';
     const DATA_TYPE_HOME_TEAM_SQUAD = 'home_team_squad';
@@ -51,11 +52,12 @@ class ApiFootballService
     {
         if (empty($this->leagueId) || empty($this->seasonId) || empty($this->round)) {
             $season = Seasons::all()->firstWhere('is_active', 1);
-            $round = Rounds::all()->firstWhere('season_id', $season->id);
 
+            // Get current round from API (we can use DB too, but let's test using API)
+            //$round = Rounds::all()->firstWhere('season_id', $season->id);
             $this->leagueId = $season->league->api_football_id;
             $this->seasonId = $season->name;
-            $this->round = $round->name;
+            $this->round = $this->getCurrentRound()[0];
         }
     }
 
@@ -64,9 +66,6 @@ class ApiFootballService
      */
     public function getFixtureLeague(): mixed
     {
-        $season = Seasons::all()->firstWhere('is_active', 1);
-        $round = Rounds::all()->firstWhere('season_id', $season->id);
-
         return $this->callAPI(
             Request::METHOD_GET,
             env('X_RAPIDAPI_HOST') . self::API_ENDPOINT_FIXTURES,
@@ -195,6 +194,22 @@ class ApiFootballService
             [
                 'bookmaker' => env('BOOKMAKER_ID'),
                 'fixture' => $fixtureId
+            ]
+        );
+    }
+
+    /**
+     * @return false|mixed|null
+     */
+    public function getCurrentRound(): mixed
+    {
+        return $this->callAPI(
+            Request::METHOD_GET,
+            env('X_RAPIDAPI_HOST') . self::API_ENDPOINT_ROUND,
+            [
+                'league' => $this->leagueId,
+                'season' => $this->seasonId,
+                'current' => 'true'
             ]
         );
     }
