@@ -51,11 +51,17 @@ class ApiFootballService
      * @param $leagueId
      * @param $seasonId
      * @return void
+     * @throws \Exception
      */
     public function init($leagueId, $seasonId): void
     {
         $this->leagueId = $leagueId;
         $this->seasonId = $seasonId;
+        $currentRound = $this->getCurrentRound($leagueId, $seasonId);
+
+        if (empty($currentRound)) {
+            throw new \Exception('Round not found');
+        }
         $this->round = $this->getCurrentRound($leagueId, $seasonId)[0];
     }
 
