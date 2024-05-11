@@ -50,7 +50,6 @@ class ApiFootballService
      *
      * @param $leagueId
      * @param $seasonId
-     * @param $round
      * @return void
      */
     public function init($leagueId, $seasonId): void
@@ -109,7 +108,7 @@ class ApiFootballService
             // Get fixtures and save
             $saved = false;
             $fixtureMatch = $this->cleanData($this->getFixtureMatch($fixtureId), self::DATA_TYPE_FIXTURES);
-            if (!empty($homeTeamSquad)) {
+            if (!empty($fixtureMatch)) {
                 $saved = $this->fixtures->store([
                     'fixture_id' => $fixtureId,
                     'league_id' => $this->leagueId,
