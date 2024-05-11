@@ -2,23 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Service\ApiFootballService;
+use App\Services\ApiFootballService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Fixtures;
-use App\Models\Standings;
 use Illuminate\Support\Facades\DB;
 
 class FixtureController extends Controller
 {
     /**
-     * @param Fixtures $fixtures
-     * @param Standings $standings
+     * @param ApiFootballService $apiFootballService
      */
     public function __construct(
-        protected ApiFootballService $apiFootballService,
-        protected Fixtures $fixtures,
-        protected Standings $standings
+        protected ApiFootballService $apiFootballService
     ) {}
 
     /**
@@ -109,142 +105,10 @@ class FixtureController extends Controller
      */
     public function storeFixturesAllData(Request $request): JsonResponse
     {
-        $this->_init();
-
-        $fixturesLeague = (array) $this->apiFootballService->getFixtureLeague();
-
-        $data = [
-            'fixtures' => ['total' => 0],
-            'standings' => ['league_id' => null, 'season_id' => null, 'round' => null],
-            'home_team_squad' => ['total' => 0],
-            'away_team_squad' => ['total' => 0],
-            'injuries' => ['total' => 0],
-            'predictions' => ['total' => 0],
-            'head_to_head' => ['total' => 0],
-            'bets' => ['total' => 0],
-        ];
-
-        // Get standings and save
-        $standings = $this->apiFootballService->getStandings();
-        $standings = $this->apiFootballService->cleanData($standings, ApiFootballService::DATA_TYPE_STANDINGS);
-        $saved = $this->standings->store([
-            'league_id' => $this->apiFootballService->leagueId,
-            'season_id' => $this->apiFootballService->seasonId,
-            'round'     => $this->apiFootballService->round,
-            'standings' => json_encode($standings)
-        ]);
-
-        if ($saved) {
-            $data['standings']['league_id'] = $this->apiFootballService->leagueId;
-            $data['standings']['season_id'] = $this->apiFootballService->seasonId;
-            $data['standings']['round'] = $this->apiFootballService->round;
-        }
-
-        foreach ($fixturesLeague as $fixture) {
-            $fixtureId = $fixture['fixture']['id'];
-            $homeTeamId = $fixture['teams']['home']['id'];
-            $awayTeamId = $fixture['teams']['away']['id'];
-
-            // Get fixtures and save
-            $fixtureMatch = $this->apiFootballService->getFixtureMatch($fixtureId);
-            $fixtureMatch = $this->apiFootballService->cleanData($fixtureMatch, ApiFootballService::DATA_TYPE_FIXTURES);
-            $saved = $this->fixtures->store([
-                'fixture_id' => $fixtureId,
-                'league_id' => $this->apiFootballService->leagueId,
-                'season_id' => $this->apiFootballService->seasonId,
-                'round' => $this->apiFootballService->round,
-                'fixtures' => json_encode($fixtureMatch)
-            ]);
-
-            if ($saved) {
-                $data['fixtures'][] = $fixtureId;
-                $data['fixtures']['total']++;
-            }
-
-            // Get home team squad and save
-            $homeTeamSquad = $this->apiFootballService->getSquads($homeTeamId);
-            $homeTeamSquad = $this->apiFootballService->cleanData($homeTeamSquad, ApiFootballService::DATA_TYPE_HOME_TEAM_SQUAD);
-            $saved = $this->fixtures->store([
-                'fixture_id' => $fixtureId,
-                'home_team_squad' => json_encode($homeTeamSquad)
-            ]);
-
-            if ($saved) {
-                $data['home_team_squad'][] = $fixtureId;
-                $data['home_team_squad']['total']++;
-            }
-
-            // Get away team squad and save
-            $awayTeamSquads = $this->apiFootballService->getSquads($awayTeamId);
-            $awayTeamSquads = $this->apiFootballService->cleanData($awayTeamSquads, ApiFootballService::DATA_TYPE_AWAY_TEAM_SQUAD);
-            $saved = $this->fixtures->store([
-                'fixture_id' => $fixtureId,
-                'away_team_squad' => json_encode($awayTeamSquads)
-            ]);
-
-            if ($saved) {
-                $data['away_team_squad'][] = $fixtureId;
-                $data['away_team_squad']['total']++;
-            }
-
-            // Get injuries and save
-            $injuries = $this->apiFootballService->getInjuries($fixtureId);
-            $injuries = $this->apiFootballService->cleanData($injuries, ApiFootballService::DATA_TYPE_INJURIES);
-            $saved = $this->fixtures->store([
-                'fixture_id' => $fixtureId,
-                'injuries' => json_encode($injuries)
-            ]);
-
-            if ($saved) {
-                $data['injuries'][] = $fixtureId;
-                $data['injuries']['total']++;
-            }
-
-            // Get predictions and save
-            $predictions = $this->apiFootballService->getPredictions($fixtureId);
-            $predictions = $this->apiFootballService->cleanData($predictions, ApiFootballService::DATA_TYPE_PREDICTIONS);
-            $saved = $this->fixtures->store([
-                'fixture_id' => $fixtureId,
-                'predictions' => json_encode($predictions)
-            ]);
-
-            if ($saved) {
-                $data['predictions'][] = $fixtureId;
-                $data['predictions']['total']++;
-            }
-
-            // Get head to head and save
-            $head2head = $this->apiFootballService->getHeadToHead($fixtureId);
-            $head2head = $this->apiFootballService->cleanData($head2head, ApiFootballService::DATA_TYPE_HEAD_TO_HEAD);
-            $saved = $this->fixtures->store([
-                'fixture_id' => $fixtureId,
-                'head_to_head' => json_encode($head2head)
-            ]);
-
-            if ($saved) {
-                $data['head_to_head'][] = $fixtureId;
-                $data['head_to_head']['total']++;
-            }
-
-            // Get bets and save
-            $bets = $this->apiFootballService->getBets($fixtureId);
-            $bets = $this->apiFootballService->cleanData($head2head, ApiFootballService::DATA_TYPE_BETS);
-            $saved = $this->fixtures->store([
-                'fixture_id' => $fixtureId,
-                'bets' => json_encode($bets)
-            ]);
-
-            if ($saved) {
-                $data['bets'][] = $fixtureId;
-                $data['bets']['total']++;
-            }
-        }
-
-        return response()->json($data);
-    }
-
-    protected function _init(): void
-    {
-        $this->apiFootballService->init();
+        return response()->json($this->apiFootballService->importFixtures(
+            $request->get('league'),
+            $request->get('season'),
+            $request->get('round')
+        ));
     }
 }
