@@ -87,16 +87,6 @@ class ApiFootballService
             'API-Football' => null
         ];
 
-        $fixtureData = [
-            'fixture' => false,
-            'home_team_squad' => false,
-            'away_team_squad' => false,
-            'injuries' => false,
-            'predictions' => false,
-            'head_to_head' => false,
-            'bets' => false
-        ];
-
         // Get standings and save
         $standings = $this->cleanData($this->getStandings(), self::DATA_TYPE_STANDINGS);
         $this->standings->store([
@@ -107,6 +97,16 @@ class ApiFootballService
         ]);
 
         foreach ($fixturesLeague as $fixture) {
+            $fixtureData = [
+                'fixture' => false,
+                'home_team_squad' => false,
+                'away_team_squad' => false,
+                'injuries' => false,
+                'predictions' => false,
+                'head_to_head' => false,
+                'bets' => false
+            ];
+
             $fixtureId = $fixture['fixture']['id'];
             $homeTeamId = $fixture['teams']['home']['id'];
             $awayTeamId = $fixture['teams']['away']['id'];
