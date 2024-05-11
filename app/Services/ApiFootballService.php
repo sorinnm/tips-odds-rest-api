@@ -66,17 +66,17 @@ class ApiFootballService
     }
 
     /**
-     * Main function to store fixtures data
+     *  Main function to store fixtures data
      *
      * @param int $leagueId
      * @param int $seasonId
-     * @param string $round
      * @return array
+     * @throws \Exception
      */
-    public function importFixtures(int $leagueId, int $seasonId, string $round): array
+    public function importFixtures(int $leagueId, int $seasonId): array
     {
         $result = [];
-        $this->init($leagueId, $seasonId, $round);
+        $this->init($leagueId, $seasonId);
 
         $fixturesLeague = (array) $this->getFixtureLeague();
 
@@ -210,7 +210,7 @@ class ApiFootballService
             // Get bets and save
             $saved = false;
             $bets = $this->cleanData($this->getBets($fixtureId), self::DATA_TYPE_BETS);
-            if (!empty($head2head)) {
+            if (!empty($bets)) {
                 $saved = $this->fixtures->store([
                     'fixture_id' => $fixtureId,
                     'bets' => json_encode($bets)

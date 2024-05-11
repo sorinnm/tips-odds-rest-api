@@ -102,13 +102,13 @@ class FixtureController extends Controller
     /**
      * @param Request $request
      * @return JsonResponse
+     * @throws \Exception
      */
     public function storeFixturesAllData(Request $request): JsonResponse
     {
         return response()->json($this->apiFootballService->importFixtures(
             $request->get('league'),
-            $request->get('season'),
-            $request->get('round')
+            $request->get('season')
         ));
     }
 }

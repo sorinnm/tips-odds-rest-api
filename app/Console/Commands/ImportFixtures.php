@@ -66,8 +66,7 @@ class ImportFixtures extends Command
                             // Import fixtures data for the current round
                             $data = $this->apiFootballService->importFixtures(
                                 $this->apiFootballService->leagueId,
-                                $this->apiFootballService->seasonId,
-                                $this->apiFootballService->round
+                                $this->apiFootballService->seasonId
                             );
                         } catch (\Throwable $exception) {
                             error("$countryName | $leagueName: " . $exception->getMessage());
