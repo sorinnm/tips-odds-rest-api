@@ -93,8 +93,7 @@ class ApiFootballService
         ];
 
         // Get standings and save
-        $standings = $this->getStandings();
-        $standings = $this->cleanData($standings, self::DATA_TYPE_STANDINGS);
+        $standings = $this->cleanData($this->getStandings(), self::DATA_TYPE_STANDINGS);
         $this->standings->store([
             'league_id' => $this->leagueId,
             'season_id' => $this->seasonId,
@@ -274,8 +273,6 @@ class ApiFootballService
      */
     public function getStandings(): mixed
     {
-        $season = Seasons::all()->firstWhere('is_active', 1);
-
         return $this->callAPI(
             Request::METHOD_GET,
             env('X_RAPIDAPI_HOST') . self::API_ENDPOINT_STANDINGS,
@@ -306,8 +303,6 @@ class ApiFootballService
      */
     public function getInjuries(int $fixtureId)
     {
-        $season = Seasons::all()->firstWhere('is_active', 1);
-
         return $this->callAPI(
             Request::METHOD_GET,
             env('X_RAPIDAPI_HOST') . self::API_ENDPOINT_INJURIES,
@@ -458,7 +453,6 @@ class ApiFootballService
     public function callAPI($httpMethod, string $endpoint, array $payload)
     {
         $result = false;
-        // env('X_RAPIDAPI_HOST') . self::API_ENDPOINT_FIXTURES
 
         try {
             $response = Http::withHeaders([
