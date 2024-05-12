@@ -11,41 +11,8 @@ class TextGenerator extends Model
 {
     use HasFactory;
 
-    const TEXT_GENERATION_ENDPOINT = '/v1/chat/completions';
-
     protected $table = 'generations';
     protected $fillable = ['fixture_id', 'generation', 'status', 'created_at', 'updated_at'];
-
-    /**
-     * @param array $payload
-     * @param int $fixtureId
-     * @return false|mixed
-     */
-    public function generateText(array $payload, int $fixtureId): mixed
-    {
-        $chatGPTResponse = false;
-
-        try {
-            $response = Http::timeout(120)->withToken(env('CHATGPT_API_KEY'))
-                ->post(env('CHATGPT_API_HOST') . self::TEXT_GENERATION_ENDPOINT, $payload);
-
-            Log::debug("CHATGPT Text Generation: " . $response->status());
-
-            if ($response->successful()) {
-                $data = $response->json();
-
-                if (!empty($data) && isset($data['choices'][0]['message']['content'])) {
-                    $chatGPTResponse = $data['choices'][0]['message']['content'];
-                }
-            } else {
-                Log::error("[" . $fixtureId . "] CHATGPT Text Generation: " . $response->status() . " >>> Message: " . $response->body());
-            }
-        } catch (\Throwable $th) {
-            Log::error("[" . $fixtureId . "] >>> Error: " . $th->getMessage());
-        }
-
-        return $chatGPTResponse;
-    }
 
     /**
      * @param array $data

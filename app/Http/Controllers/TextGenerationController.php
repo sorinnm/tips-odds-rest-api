@@ -20,38 +20,10 @@ class TextGenerationController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        // Retrieve the AI model to be used with ChatGPT and the user-defined prompt messages
-        $messages = $request->get('messages');
-        $payload = [
-            'model' => $request->get('model')
-        ];
 
-        $data = ['generations' => ['success' => 0, 'error' => 0]];
-
-        // Add to messages the JSON contents for ChatGPT processing
-        $standings = $this->standings->retrieveStandings(
-            $request->get('league'),
-            $request->get('season'),
-            $request->get('round')
-        );
-
-        $fixtures = $this->fixtures->getAll(
-            $request->get('league'),
-            $request->get('season'),
-            $request->get('round')
-        );
 
         foreach ($fixtures as $fixture) {
-            $messages[] = ['role' => 'user', 'content' => Json::encode($fixture->fixtures)];
-            $messages[] = ['role' => 'user', 'content' => Json::encode($standings->standings)];
-            $messages[] = ['role' => 'user', 'content' => Json::encode($fixture->home_team_squad)];
-            $messages[] = ['role' => 'user', 'content' => Json::encode($fixture->away_team_squad)];
-            $messages[] = ['role' => 'user', 'content' => Json::encode($fixture->injuries)];
-            $messages[] = ['role' => 'user', 'content' => Json::encode($fixture->predictions)];
-            $messages[] = ['role' => 'user', 'content' => Json::encode($fixture->head_to_head)];
-            $messages[] = ['role' => 'user', 'content' => Json::encode($fixture->bets)];
 
-            $payload['messages'] = $messages;
 
             $chatGPTResponse = $this->generatorModel->generateText($payload, $fixture->fixture_id);
 

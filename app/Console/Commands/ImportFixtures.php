@@ -43,7 +43,7 @@ class ImportFixtures extends Command
     public function handle(): void
     {
         $countryName = $leagueName = '';
-        $this->registerCustomTableStyle();;
+        $this->registerCustomTableStyle();
         $sports = Sports::all();
 
         $headers = ['ID', 'Match', 'Updated At', 'API-Football'];
