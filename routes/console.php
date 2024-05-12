@@ -1,8 +1,11 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote')->hourly();
+Schedule::command('top:import-fixtures')
+    ->timezone('Europe/Bucharest')
+    ->withoutOverlapping()
+    ->sendOutputTo(storage_path('tipsOddsPredictions' . DIRECTORY_SEPARATOR . 'importFixtures-' . date('Y-m-d H:i:s') . '.log'))
+    ->emailOutputTo(['sorinmihaiparvu@gmail.com', 'dan_lopataru@yahoo.com'])
+    ->description("Imported fixtures from API-Football")
+    ->everyFiveMinutes();
