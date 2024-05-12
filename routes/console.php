@@ -8,4 +8,4 @@ Schedule::command('top:import-fixtures')
     ->sendOutputTo(storage_path('tipsOddsPredictions' . DIRECTORY_SEPARATOR . 'importFixtures-' . date('Y-m-d H:i:s') . '.log'))
     ->emailOutputTo(['sorinmihaiparvu@gmail.com', 'dan_lopataru@yahoo.com'])
     ->description("Imported fixtures from API-Football")
-    ->everyFiveMinutes();
+    ->daily();
