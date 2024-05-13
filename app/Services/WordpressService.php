@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Fixtures;
 use App\Models\Leagues;
+use App\Models\Sports;
 use App\Models\TextGenerator;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Support\Facades\Http;
@@ -45,16 +46,14 @@ class WordpressService
         $authorId = $league->country->author_id;
         $leagueCategoryId = $league->category_id;
         $countryCategoryId = $league->country->category_id;
+        $sportCategoryId = $league->country->sport->category_id;
 
         $payload = [
             'title' => "$homeTeam vs $awayTeam $matchDate Tips & Predictions",
             'content' => $html,
             'status' => 'draft',
             'author' => $authorId,
-            'categories' => [$leagueCategoryId, $countryCategoryId],
-            'meta' => [
-                'description' => "$homeTeam vs $awayTeam $matchDate Tips & Predictions! Get the latest betting predictions and tips for this thrilling encounter."
-            ]
+            'categories' => [$leagueCategoryId, $countryCategoryId, $sportCategoryId]
         ];
 
         return $this->callAPI(

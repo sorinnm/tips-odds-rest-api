@@ -75,9 +75,10 @@ class ExportWordpress extends Command
 
                     if (isset($posted['report'])) {
                         $this->renderTable($headers, $posted['report']);
+                    } else {
+                        throw new \Exception(' no report found from WordPress');
                     }
 
-                    throw new \Exception(' no report found from WordPress');
                 default:
                     Log::channel('wordpress')->error("Invalid input");
             }
@@ -120,8 +121,8 @@ class ExportWordpress extends Command
             throw new \Exception(' is not pending export to WordPress >>> Status: ' . $generation->status);
         }
 
-        $postData['response'] = $this->wordpressService->exportFixture($fixture);
-        Log::channel('wordpress')->debug("#$fixture->fixture_id | $this->homeTeam - $this->awayTeam: WordPress response: " . JSON::encode($postData['response']));
+        $response = $this->wordpressService->exportFixture($fixture);
+        Log::channel('wordpress')->debug("#$fixture->fixture_id | $this->homeTeam - $this->awayTeam: WordPress response: " . JSON::encode($response));
 
         // set generation to status=complete if OK
         if (isset($response['id']) && isset($response['link'])) {
@@ -130,6 +131,7 @@ class ExportWordpress extends Command
                 'status' => TextGenerator::STATUS_COMPLETE
             ]);
 
+            $postData['response'] = $response;
             $postData['report']['ID'] = $fixture->fixture_id;
             $postData['report']['Match'] = "$this->homeTeam - $this->awayTeam";
             $postData['report']['Updated At'] = date('Y-m-d H:i:s');
@@ -153,7 +155,7 @@ class ExportWordpress extends Command
                     'ID' => $data['ID'],
                     'Match' => $data['Match'],
                     'Updated At' => $data['Updated At'],
-                    'Wordpress' => $data['Wordpress']
+                    'WordPress' => $data['WordPress']
                 ]
             ])
             ->setStyle('tipsOddsPredictions');
