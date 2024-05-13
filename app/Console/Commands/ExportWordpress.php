@@ -7,6 +7,7 @@ use App\Models\Leagues;
 use App\Models\TextGenerator;
 use App\Services\WordpressService;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Casts\Json;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableStyle;
 use function Laravel\Prompts\error;
@@ -78,6 +79,7 @@ class ExportWordpress extends Command
 
                     throw new \Exception(' no report found from WordPress');
                 default:
+                    Log::channel('wordpress')->error("Invalid input");
             }
         } catch (\Throwable $exception) {
             Log::channel('wordpress')->error("$this->countryName | $this->leagueName | $this->round: $this->homeTeam - $this->awayTeam - #" . $fixtureId . $exception->getMessage());

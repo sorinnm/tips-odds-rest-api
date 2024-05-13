@@ -7,6 +7,7 @@ use App\Models\Fixtures;
 use App\Models\Leagues;
 use App\Models\Seasons;
 use App\Models\Standings;
+use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Request;
@@ -241,6 +242,167 @@ class ApiFootballService
         return $result;
     }
 
+    public function reimportFixture(Fixtures $fixture)
+    {
+        $fixtureId = $fixture->fixture_id;
+
+        $homeTeamData = json_decode($fixture->home_team_squad, true);
+        if (empty($homeTeamData)) {
+            throw new \Exception(' missing home team squad data');
+        }
+        $homeTeamId = $homeTeamData[0]['team']['id'];
+
+        $awayTeamData = json_decode($fixture->away_team_squad, true);
+        if (empty($awayTeamData)) {
+            throw new \Exception(' missing away team squad data');
+        }
+        $awayTeamId = $awayTeamData[0]['team']['id'];
+
+        $fixtureData = json_decode($fixture->fixtures, true);
+        if (empty($fixtureData)) {
+            throw new \Exception(' missing fixtures data');
+        }
+
+        $homeTeam = $fixtureData[0]['teams']['home']['name'];
+        $awayTeam = $fixtureData[0]['teams']['away']['name'];
+
+        $fixtureData = [
+            'fixture' => false,
+            'home_team_squad' => false,
+            'away_team_squad' => false,
+            'injuries' => false,
+            'predictions' => false,
+            'head_to_head' => false,
+            'bets' => false
+        ];
+
+        // Get fixtures and save
+        $saved = false;
+        $fixtureMatch = $this->cleanData($this->getFixtureMatch($fixtureId), self::DATA_TYPE_FIXTURES);
+        if (!empty($fixtureMatch)) {
+            $saved = $this->fixtures->store([
+                'fixture_id' => $fixtureId,
+                'fixtures' => json_encode($fixtureMatch)
+            ]);
+        }
+
+        if ($saved) {
+            $reportData['ID'] = $fixtureId;
+            $reportData['Match'] = "$homeTeam - $awayTeam";
+            $reportData['Updated At'] = date('Y-m-d H:i:s');
+            $fixtureData['id'] = $fixtureId;
+            $fixtureData['fixture'] = true;
+        }
+
+        // Get home team squad and save
+        $saved = false;
+        $homeTeamSquad = $this->cleanData($this->getSquads($homeTeamId), self::DATA_TYPE_HOME_TEAM_SQUAD);
+        if (!empty($homeTeamSquad)) {
+            $saved = $this->fixtures->store([
+                'fixture_id' => $fixtureId,
+                'home_team_squad' => json_encode($homeTeamSquad)
+            ]);
+        }
+
+        if ($saved) {
+            $fixtureData['home_team_squad'] = true;
+            $reportData['Updated At'] = date('Y-m-d H:i:s');
+        }
+
+        // Get away team squad and save
+        $saved = false;
+        $awayTeamSquads = $this->cleanData($this->getSquads($awayTeamId), self::DATA_TYPE_AWAY_TEAM_SQUAD);
+        if (!empty($awayTeamSquads)) {
+            $saved = $this->fixtures->store([
+                'fixture_id' => $fixtureId,
+                'away_team_squad' => json_encode($awayTeamSquads)
+            ]);
+        }
+
+        if ($saved) {
+            $fixtureData['away_team_squad'] = true;
+            $reportData['Updated At'] = date('Y-m-d H:i:s');
+        }
+
+        // Get injuries and save
+        $saved = false;
+        $injuries = $this->cleanData($this->getInjuries($fixtureId), self::DATA_TYPE_INJURIES);
+        if (!empty($injuries)) {
+            $saved = $this->fixtures->store([
+                'fixture_id' => $fixtureId,
+                'injuries' => json_encode($injuries)
+            ]);
+        }
+
+        if ($saved) {
+            $fixtureData['injuries'] = true;
+            $reportData['Updated At'] = date('Y-m-d H:i:s');
+        }
+
+        // Get predictions and save
+        $saved = false;
+        $predictions = $this->cleanData($this->getPredictions($fixtureId), self::DATA_TYPE_PREDICTIONS);
+        if (!empty($predictions)) {
+            $saved = $this->fixtures->store([
+                'fixture_id' => $fixtureId,
+                'predictions' => json_encode($predictions)
+            ]);
+        }
+
+        if ($saved) {
+            $fixtureData['predictions'] = true;
+            $reportData['Updated At'] = date('Y-m-d H:i:s');
+        }
+
+        // Get head to head and save
+        $saved = false;
+        $head2head = $this->cleanData($this->getHeadToHead($fixtureId), self::DATA_TYPE_HEAD_TO_HEAD);
+        if (!empty($head2head)) {
+            $saved = $this->fixtures->store([
+                'fixture_id' => $fixtureId,
+                'head_to_head' => json_encode($head2head)
+            ]);
+        }
+
+        if ($saved) {
+            $fixtureData['head_to_head'] = true;
+            $reportData['Updated At'] = date('Y-m-d H:i:s');
+        }
+
+        // Get bets and save
+        $saved = false;
+        $bets = $this->cleanData($this->getBets($fixtureId), self::DATA_TYPE_BETS);
+        if (!empty($bets)) {
+            $saved = $this->fixtures->store([
+                'fixture_id' => $fixtureId,
+                'bets' => json_encode($bets)
+            ]);
+        }
+
+        if ($saved) {
+            $fixtureData['bets'] = true;
+            $reportData['Updated At'] = date('Y-m-d H:i:s');
+        }
+
+        $apiFootballErrors = [];
+        foreach ($fixtureData as $key => $val) {
+            if ($val === false) {
+                $apiFootballErrors[] = $key;
+            }
+        }
+
+        if (empty($apiFootballErrors)) {
+            $reportData['API-Football'] = 'OK';
+        } else {
+            $reportData['API-Football'] = implode(',', $apiFootballErrors);
+        }
+
+        return [
+            'report' => $reportData,
+            'fixtures' => $fixtureData
+        ];
+    }
+
     /**
      * @return false|mixed|null
      */
@@ -399,12 +561,13 @@ class ApiFootballService
      */
     public function cleanData(array $jsonArray, string $type): array
     {
+        Log::channel('api-football')->debug("Initial array of type: $type with content: " . Json::encode($jsonArray));
         switch ($type) {
             case self::DATA_TYPE_FIXTURES:
                 $keysToRemove = ['id', 'flag', 'logo', 'comments', 'players'];
                 $result = $this->removeKeys($jsonArray, $keysToRemove);
                 break;
-            case self::DATA_TYPE_HOME_TEAM_SQUAD|self::DATA_TYPE_AWAY_TEAM_SQUAD:
+            case self::DATA_TYPE_HOME_TEAM_SQUAD || self::DATA_TYPE_AWAY_TEAM_SQUAD:
                 $keysToRemove = ['id', 'logo', 'photo'];
                 $result = $this->removeKeys($jsonArray, $keysToRemove);
                 break;
@@ -412,7 +575,7 @@ class ApiFootballService
                 $keysToRemove = ['id', 'logo', 'flag', 'photo'];
                 $result = $this->removeKeys($jsonArray, $keysToRemove);
                 break;
-            case self::DATA_TYPE_PREDICTIONS|self::DATA_TYPE_STANDINGS|self::DATA_TYPE_HEAD_TO_HEAD:
+            case self::DATA_TYPE_PREDICTIONS || self::DATA_TYPE_STANDINGS || self::DATA_TYPE_HEAD_TO_HEAD:
                 $keysToRemove = ['id', 'logo', 'flag'];
                 $result = $this->removeKeys($jsonArray, $keysToRemove);
                 break;
@@ -423,6 +586,7 @@ class ApiFootballService
             default:
                 $result = $jsonArray;
         }
+        Log::channel('api-football')->debug("Result array of type: $type with content: " . Json::encode($result));
 
         return $result;
     }
@@ -464,7 +628,7 @@ class ApiFootballService
                 'Accept' => 'application/json'
             ])->$httpMethod($endpoint, $payload);
 
-            Log::debug($endpoint. " >>> Status code: " . $response->status());
+            Log::channel('api-football')->debug($endpoint. " >>> Status code: " . $response->status());
 
             if ($response->successful()) {
                 $data = $response->json();
@@ -476,7 +640,7 @@ class ApiFootballService
 
             return $result;
         } catch (\Throwable $th) {
-            Log::error($th->getMessage());
+            Log::channel('api-football')->error(__CLASS__ . ' >>> ' . $th->getMessage());
         }
     }
 }

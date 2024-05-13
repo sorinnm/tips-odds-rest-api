@@ -127,6 +127,12 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'api-football' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/api_football.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'replace_placeholders' => true,
+        ],
         'chatgpt' => [
             'driver' => 'single',
             'path' => storage_path('logs/chatgpt.log'),
