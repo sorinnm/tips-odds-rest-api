@@ -39,19 +39,19 @@ class ChatGPTService
             ["role" => "user", "content" => "I will provide 8 JSON format objects"],
             ["role" => "user", "content" => "taking into consideration the information provided, I want you to create an article regarding tips, odds and prediction for the sport event. Structure of the article will be:"],
             ["role" => "user", "content" => "First paragraph: make a 300 words match preview.
-            Make the title in bold first team vs second team match preview. Use long-tail keywords when possible, like first team vs second team match, first team vs second team preview, first team vs second team prediction, first team second team tips, first team second team bets.
+            Make the title as first team vs second team match preview. Use long-tail keywords when possible, like first team vs second team match, first team vs second team preview, first team vs second team prediction, first team second team tips, first team second team bets.
             Don't use the exact words \"first team\" or \"second team\", replace them with the actual name of the teams. Don't use double quotes for the keywords, just integrate them naturally into text.
             Mention the current standings and recent form for each team.
             Second paragraph: Using the provided information, create a paragraph of approximately 50 words with the top prediction for this match.
             We will use this paragraph for google search engine optimization, for getting the featured snippet. Below, create an article of approximately 150 words highlighting the top 3 predictions for the match.
-            Take into consideration using keywords for better SEO. Each paragraph of the article should have first the prediction in bold letters, then why this is the probable result.
+            Take into consideration using keywords for better SEO. Each paragraph of the article should have first the prediction then why this is the probable result.
             Use as often as possible long tail keywords like first team vs second team prediction, first team second team bets, etc in both snippet and article.
             Write it like a bettor would, without mentioning terms like seo and keywords.
             Name the snippet using the name of the first team vs the name of the second team Betting Predictions.
             Name the article using the name of the first team vs the name of the second team Top Predictions for betting.
             The third paragraph : make a 100 words essay regarding last 5 head to head between the two teams.
-            Specify in bold the dates and the result of each match, as \"Team 1 vs Team 2  (or team 2 vs team 1) - Score - Date\".
-            Make the title in bold. Use long-tail keywords when possible, like first team vs second team match, first team vs second team preview, first team vs second team prediction, first team second team tips, first team second team bets.
+            Specify the dates and the result of each match, as \"Team 1 vs Team 2  (or team 2 vs team 1) - Score - Date\".
+            Use long-tail keywords when possible, like first team vs second team match, first team vs second team preview, first team vs second team prediction, first team second team tips, first team second team bets.
             Don't use the exact words \"first team\" or \"second team\", replace them with the actual name of the teams. Don't use double quotes for the keywords, just integrate them naturally into text.
             The forth paragraph : make a 100 words essay regarding the squads, presenting the absents ( injuries and suspended ).
             Use long-tail keywords when possible, like first team vs second team match, first team vs second team preview, first team vs second team prediction, first team second team tips, first team second team bets.

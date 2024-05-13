@@ -1,5 +1,5 @@
 <!-- wp:heading {"textAlign":"center","level":1,"style":{"elements":{"link":{"color":{"text":"var:preset|color|foreground"}}}},"backgroundColor":"background","textColor":"foreground"} -->
-<h1 class="wp-block-heading has-text-align-center has-foreground-color has-background-background-color has-text-color has-background has-link-color" id="h-aston-villa-vs-liverpool-may-14-2024-betting-tips-amp-predictions"><strong>{{ str_replace(' Match Preview', '', $first_paragraph['title'])}} {{$matchDate}} Betting Tips &amp; Predictions</strong></h1>
+<h1 class="wp-block-heading has-text-align-center has-foreground-color has-background-background-color has-text-color has-background has-link-color" id="h-aston-villa-vs-liverpool-may-14-2024-betting-tips-amp-predictions"><strong>{{ str_replace(' Match Preview', '', $first_paragraph['title']) }} {{$matchDate}} Betting Tips &amp; Predictions</strong></h1>
 <!-- /wp:heading -->
 
 <!-- wp:separator {"style":{"spacing":{"margin":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|50"}}}} -->
@@ -7,11 +7,11 @@
 <!-- /wp:separator -->
 
 <!-- wp:heading -->
-<h2 class="wp-block-heading" id="h-aston-villa-vs-liverpool-may-14-2024-betting-tips-amp-predictions-0"><strong><strong>{{ str_replace(' Match Preview', '', $first_paragraph['title'])}} {{$matchDate}} Betting Tips &amp; Predictions</strong></strong></h2>
+<h2 class="wp-block-heading" id="h-aston-villa-vs-liverpool-may-14-2024-betting-tips-amp-predictions-0"><strong><strong>{{ str_replace(' Match Preview', '', $first_paragraph['title']) }} {{$matchDate}} Betting Tips &amp; Predictions</strong></strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p><strong><strong>{{ str_replace(' Match Preview', '', $first_paragraph['title'])}} {{$matchDate}} Betting Tips &amp; Predictions</strong></strong><br>{{ $first_paragraph['content'] }}</p>
+<p><strong><strong>{{ str_replace(' Match Preview', '', $first_paragraph['title']) }} {{$matchDate}} Betting Tips &amp; Predictions</strong></strong><br>{{ $first_paragraph['content'] }}</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:spacer {"height":"30px"} -->
@@ -26,9 +26,23 @@
 <p>{{ $second_paragraph['content'] }}</p>
 <!-- /wp:paragraph -->
 
-@foreach ($second_paragraph['top_3_predictions'] as $prediction)
+@php
+    $topPredictions = $second_paragraph['top_3_predictions'];
+    foreach ($second_paragraph['top_3_predictions'] as $prediction) {
+        $keys = array_keys($prediction);
+        if (is_array($prediction[$keys[0]])) {
+            $topPredictions = $prediction;
+        }
+    }
+@endphp
+
+
+@foreach ($topPredictions as $prediction)
+    @php
+        $keys = array_keys($prediction);
+    @endphp
     <!-- wp:paragraph -->
-    <p><strong>{{ $prediction['prediction'] }}</strong>: {{ $prediction['explanation'] }}</p>
+    <p><strong>{{ $prediction[$keys[0]] }}</strong>: {{ $prediction[$keys[1]] }}</p>
     <!-- /wp:paragraph -->
 @endforeach
 
@@ -47,8 +61,11 @@
 <!-- wp:list -->
 <ul>
     @foreach ($third_paragraph['head_to_head'] as $h2h)
+        @php
+             $keys = array_keys($h2h);
+        @endphp
         <!-- wp:list-item -->
-        <li>{{ $h2h['match'] }}</li>
+        <li>{{ $h2h[$keys[0]] }}</li>
         <!-- /wp:list-item -->
     @endforeach
 </ul>
@@ -67,7 +84,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>These are the {{ str_replace(' Match Preview', '', $first_paragraph['title'])}} {{$matchDate}} Betting Tips &amp; Predictions.</p>
+<p>These are the {{ str_replace(' Match Preview', '', $first_paragraph['title']) }} {{$matchDate}} Betting Tips &amp; Predictions.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:spacer {"height":"30px"} -->
