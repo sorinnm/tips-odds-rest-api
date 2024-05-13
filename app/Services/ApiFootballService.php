@@ -561,7 +561,6 @@ class ApiFootballService
      */
     public function cleanData(array $jsonArray, string $type): array
     {
-        Log::channel('api-football')->debug("Initial array of type: $type with content: " . Json::encode($jsonArray));
         switch ($type) {
             case self::DATA_TYPE_FIXTURES:
                 $keysToRemove = ['id', 'flag', 'logo', 'comments', 'players'];
@@ -586,7 +585,6 @@ class ApiFootballService
             default:
                 $result = $jsonArray;
         }
-        Log::channel('api-football')->debug("Result array of type: $type with content: " . Json::encode($result));
 
         return $result;
     }
