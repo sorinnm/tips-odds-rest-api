@@ -132,6 +132,12 @@ return [
             'path' => storage_path('logs/chatgpt.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
+        ],
+        'wordpress' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/wordpress.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'replace_placeholders' => true,
         ]
 
     ],

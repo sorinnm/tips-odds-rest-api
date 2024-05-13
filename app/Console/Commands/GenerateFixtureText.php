@@ -61,28 +61,26 @@ class GenerateFixtureText extends Command
     public function handle(): void
     {
         $fixtureId = $this->argument('fixtureId');
-        $countryName = $leagueName = $round = $homeTeam = $awayTeam = '';
         $this->registerCustomTableStyle();
         $headers = ['ID', 'Match', 'Updated At', 'ChatGPT'];
 
-//        try {
+        try {
             switch ($fixtureId) {
                 case 'all':
                     // Get all 'pending' fixtures and generate AI text
-                    Log::channel('chatgpt')->info('all');
+                    $fixtures = Fixtures::all()->where('status', '=', Fixtures::STATUS_PENDING);
 
-                    $fixtures = Fixtures::all()->where('status', '=', 'pending');
-
+                    $tableData = [];
                     foreach ($fixtures as $fixture) {
                         $this->init($fixture);
-                        $generatedData = $this->processFixture($fixture);
-                        $this->renderTable($headers, $generatedData);
+                        $tableData[] = $this->processFixture($fixture);
                     }
+
+                    $this->renderTable($headers, $tableData);
 
                     break;
                 case is_numeric($fixtureId):
                     // Get specific 'pending' fixture and generate AI text
-                    Log::channel('chatgpt')->info($fixtureId);
 
                     $fixture = Fixtures::all()->where('fixture_id', $fixtureId)->first();
                     $this->init($fixture);
@@ -93,10 +91,10 @@ class GenerateFixtureText extends Command
                     // Invalid input
                     Log::channel('chatgpt')->error('Invalid input');
             }
-//        } catch (\Throwable $exception) {
-//            Log::channel('chatgpt')->error("$this->countryName | $this->leagueName | $this->round: $homeTeam - $awayTeam - #" . $fixtureId . $exception->getMessage());
-//            error("$this->countryName | $this->leagueName | $this->round: $this->homeTeam - $this->awayTeam - #" . $fixtureId . ' >>> ' . $exception->getMessage());
-//        }
+        } catch (\Throwable $exception) {
+            Log::channel('chatgpt')->error("$this->countryName | $this->leagueName | $this->round: $this->homeTeam - $this->awayTeam - #" . $fixtureId . $exception->getMessage());
+            error("$this->countryName | $this->leagueName | $this->round: $this->homeTeam - $this->awayTeam - #" . $fixtureId . ' >>> ' . $exception->getMessage());
+        }
     }
 
     /**
@@ -126,7 +124,7 @@ class GenerateFixtureText extends Command
      */
     public function processFixture(Fixtures $fixture): array
     {
-        if ($fixture->status !== 'pending') {
+        if ($fixture->status !== Fixtures::STATUS_PENDING) {
             Log::channel('chatgpt')->warning($fixture->fixture_id . ' is not pending generation >>> Status: ' . $fixture->status);
             throw new \Exception(' is not pending generation >>> Status: ' . $fixture->status);
         }

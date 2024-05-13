@@ -8,11 +8,9 @@ use App\Models\Seasons;
 use App\Models\Sports;
 use App\Services\ApiFootballService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 use function Laravel\Prompts\error;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableStyle;
-use Illuminate\Support\Facades\File;
 
 class ImportFixtures extends Command
 {

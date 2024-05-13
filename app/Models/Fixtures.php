@@ -5,9 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Traits\EnumeratesValues;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class Fixtures extends Model
 {
@@ -15,6 +12,12 @@ class Fixtures extends Model
 
     protected $table = 'fixtures';
     protected $fillable = ['fixture_id', 'fixtures', 'standings', 'home_team_squad', 'away_team_squad', 'injuries', 'predictions', 'head_to_head', 'bets', 'status', 'created_at', 'updated_at'];
+
+    const STATUS_COMPLETE = 'complete';
+    const STATUS_PENDING = 'pending';
+    const STATUS_RUNNING = 'running';
+    const STATUS_RETRY = 'retry';
+    const STATUS_ERROR = 'error';
 
     /**
      * @param array $data
@@ -49,7 +52,7 @@ class Fixtures extends Model
             ->where('league_id', $leagueId)
             ->where('season_id', $seasonId)
             ->where('round', $round)
-            ->where('status', '=', 'pending');
+            ->where('status', '=', self::STATUS_PENDING);
     }
 
     /**
@@ -60,6 +63,6 @@ class Fixtures extends Model
     {
         return Fixtures::all()
             ->where('fixture_id', $fixtureId)
-            ->where('status', '=', 'pending');
+            ->where('status', '=', self::STATUS_PENDING);
     }
 }
