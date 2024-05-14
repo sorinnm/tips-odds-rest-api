@@ -121,7 +121,7 @@ class ExportWordpress extends Command
             throw new \Exception(' is not pending export to WordPress >>> Status: ' . $generation->status);
         }
 
-        $response = $this->wordpressService->exportFixture($fixture);
+        $response = $this->wordpressService->exportPost($fixture);
         Log::channel('wordpress')->debug("#$fixture->fixture_id | $this->homeTeam - $this->awayTeam: WordPress response: " . JSON::encode($response));
 
         // set generation to status=complete if OK

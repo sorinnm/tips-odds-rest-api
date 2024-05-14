@@ -27,10 +27,9 @@ class TextGenerator extends Model
     public function store(array $data): bool
     {
         // Before creating a new generation, try to find an existing one
-        $generations = TextGenerator::all();
-        $generation = $generations->firstWhere('fixture_id', $data['fixture_id']);
+        $generation = TextGenerator::all()->firstWhere('fixture_id', $data['fixture_id']);;
 
-        if (empty($fixture)) {
+        if (empty($generation)) {
             $generation = new TextGenerator();
         }
 

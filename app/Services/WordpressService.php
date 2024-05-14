@@ -21,7 +21,7 @@ class WordpressService
     /**
      * @throws \Exception
      */
-    public function exportFixture(Fixtures $fixture)
+    public function exportPost(Fixtures $fixture)
     {
         $matchDate = $homeTeam = $awayTeam = '';
         $generation = $this->generatorModel->getGeneration($fixture->fixture_id);
@@ -47,6 +47,9 @@ class WordpressService
         $leagueCategoryId = $league->category_id;
         $countryCategoryId = $league->country->category_id;
         $sportCategoryId = $league->country->sport->category_id;
+        $sportPath = $league->country->sport->category_path;
+        $countryPath = $league->country->category_path;
+        $leaguePath = $league->category_path;
 
         $payload = [
             'title' => "$homeTeam vs $awayTeam $matchDate Tips & Predictions",
