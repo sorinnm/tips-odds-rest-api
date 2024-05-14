@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('generations', function (Blueprint $table) {
             $table->addColumn('integer', 'post_id')->after('generation')->nullable();
+            $table->addColumn('integer', 'page_id')->after('post_id')->nullable();
         });
     }
 
@@ -22,5 +23,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropColumns('generations', 'post_id');
+        Schema::dropColumns('generations', 'page_id');
     }
 };
