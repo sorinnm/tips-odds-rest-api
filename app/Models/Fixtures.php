@@ -11,7 +11,24 @@ class Fixtures extends Model
     use HasFactory;
 
     protected $table = 'fixtures';
-    protected $fillable = ['fixture_id', 'fixtures', 'standings', 'home_team_squad', 'away_team_squad', 'injuries', 'predictions', 'head_to_head', 'bets', 'status', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'fixture_id',
+        'fixtures',
+        'standings',
+        'home_team_squad',
+        'away_team_squad',
+        'injuries',
+        'predictions',
+        'head_to_head',
+        'bets',
+        'status',
+        'home_log',
+        'home_team_id',
+        'away_logo',
+        'away_team_id',
+        'created_at',
+        'updated_at'
+    ];
 
     const STATUS_COMPLETE = 'complete';
     const STATUS_PENDING = 'pending';

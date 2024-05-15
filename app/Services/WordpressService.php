@@ -45,26 +45,29 @@ class WordpressService
             $generation['matchDate'] = $matchDate;
         }
 
-        $html = view('wordpress_post', $generation)->render();
+        $html = $this->generateHtml($generation, $exportType);
 
         $league = Leagues::all()->where('api_football_id', $fixture->league_id)->first();
         $authorId = $league->country->author_id;
         $leagueCategoryId = $league->category_id;
         $countryCategoryId = $league->country->category_id;
         $sportCategoryId = $league->country->sport->category_id;
-        $sportPath = $league->country->sport->category_path;
-        $countryPath = $league->country->category_path;
-        $leaguePath = $league->category_path;
+        $homeLogo = $fixture->home_logo;
+        $awayLogo = $fixture->away_logo;
+
+        $matchTitleField = '<h2 class="match-title-h1"><img src="'.$homeLogo.'" class="match-title-logo"/> <span class="match-title-home">'.$homeTeam.'</span> - <span class="match-title-away">'.$awayTeam.'</span> <img src="'.$awayLogo.'" class="match-title-logo"/><span class="match-title-date">'.$matchDate.'</span></h2>';
 
         $payload = [
             'title' => "$homeTeam vs $awayTeam $matchDate Tips & Predictions",
             'content' => $html,
             'status' => 'draft',
             'author' => $authorId,
-            'categories' => [$leagueCategoryId, $countryCategoryId, $sportCategoryId]
+            'categories' => [$leagueCategoryId, $countryCategoryId, $sportCategoryId],
+            'template'=> 'matchpage',
+            'acf' => [
+                'match_title' => $matchTitleField
+            ]
         ];
-
-        $result = [];
 
         switch ($exportType) {
             case self::EXPORT_TYPE_POST:
@@ -83,9 +86,32 @@ class WordpressService
                 );
                 $result['entity_type'] = self::EXPORT_TYPE_PAGE;
                 break;
+            default:
+                $result = [];
         }
 
         return $result;
+    }
+
+    /**
+     * @param array $generation
+     * @param string $exportType
+     * @return string
+     */
+    public function generateHtml(array $generation, string $exportType): string
+    {
+        switch ($exportType) {
+            case self::EXPORT_TYPE_POST:
+                $html = view('wordpress_post', $generation)->render();
+                break;
+            case self::EXPORT_TYPE_PAGE:
+                $html = view('wordpress_page', $generation)->render();
+                break;
+            default:
+                $html = '';
+        }
+
+        return $html;
     }
 
     /**

@@ -19,22 +19,45 @@
 <!-- /wp:paragraph -->
 
 @php
-    $topPredictions = $second_paragraph['top_3_predictions'];
-    foreach ($second_paragraph['top_3_predictions'] as $prediction) {
-        $keys = array_keys($prediction);
-        if (is_array($prediction[$keys[0]])) {
-            $topPredictions = $prediction;
+//    $topPredictions = $second_paragraph['top_3_predictions'];
+//    foreach ($second_paragraph['top_3_predictions'] as $prediction) {
+//        if (is_array($prediction)) {
+//            $keys = array_keys($prediction);
+//            if (is_array($prediction[$keys[0]])) {
+//                $topPredictions = $prediction;
+//            }
+//        } else {
+//            $topPredictions = $second_paragraph['top_3_predictions'];
+//        }
+//    }
+
+function parsePredictions($data): array
+{
+    $result = [];
+    foreach ($data as $key => $value) {
+        if (is_array($value)) {
+            foreach ($value as $subKey => $subValue) {
+                if (is_array($subValue)) {
+                    parsePredictions($subValue);
+                } else {
+                    $result[$subKey] = $subValue;
+                }
+            }
+        } else {
+           $result[$key] = $value;
         }
     }
+
+    return $result;
+}
+
+$topPredictions = parsePredictions($second_paragraph['top_3_predictions']);
 @endphp
 
 
-@foreach ($topPredictions as $prediction)
-    @php
-        $keys = array_keys($prediction);
-    @endphp
+@foreach ($topPredictions as $prediction => $reason)
         <!-- wp:paragraph -->
-    <p><strong>{{ $prediction[$keys[0]] }}</strong>: {{ $prediction[$keys[1]] }}</p>
+    <p><strong>{{ $prediction }}</strong>: {{ $reason }}</p>
     <!-- /wp:paragraph -->
 @endforeach
 

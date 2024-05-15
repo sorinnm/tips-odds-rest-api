@@ -120,7 +120,10 @@ class ApiFootballService
                     'league_id' => $this->leagueId,
                     'season_id' => $this->seasonId,
                     'round' => $this->round,
-                    'fixtures' => json_encode($fixtureMatch)
+                    'fixtures' => json_encode($fixtureMatch),
+                    'home_team_id' => $homeTeamId,
+                    'away_team_id' => $awayTeamId,
+                    'status' => Fixtures::STATUS_PENDING
                 ]);
             }
 
@@ -134,10 +137,13 @@ class ApiFootballService
 
             // Get home team squad and save
             $saved = false;
-            $homeTeamSquad = $this->cleanData($this->getSquads($homeTeamId), self::DATA_TYPE_HOME_TEAM_SQUAD);
+            $homeTeamSquad = $this->getSquads($homeTeamId);
+            $homeTeamLogo = $homeTeamSquad[0]['team']['logo'];
+            $homeTeamSquad = $this->cleanData($homeTeamSquad, self::DATA_TYPE_HOME_TEAM_SQUAD);
             if (!empty($homeTeamSquad)) {
                 $saved = $this->fixtures->store([
                     'fixture_id' => $fixtureId,
+                    'home_logo' => $homeTeamLogo,
                     'home_team_squad' => json_encode($homeTeamSquad)
                 ]);
             }
@@ -149,10 +155,13 @@ class ApiFootballService
 
             // Get away team squad and save
             $saved = false;
-            $awayTeamSquads = $this->cleanData($this->getSquads($awayTeamId), self::DATA_TYPE_AWAY_TEAM_SQUAD);
+            $awayTeamSquad = $this->getSquads($awayTeamId);
+            $awayTeamLogo = $awayTeamSquad[0]['team']['logo'];
+            $awayTeamSquads = $this->cleanData($awayTeamSquad, self::DATA_TYPE_AWAY_TEAM_SQUAD);
             if (!empty($awayTeamSquads)) {
                 $saved = $this->fixtures->store([
                     'fixture_id' => $fixtureId,
+                    'away_logo' => $awayTeamLogo,
                     'away_team_squad' => json_encode($awayTeamSquads)
                 ]);
             }
@@ -242,21 +251,11 @@ class ApiFootballService
         return $result;
     }
 
-    public function reimportFixture(Fixtures $fixture)
+    public function reimportFixture(Fixtures $fixture): array
     {
         $fixtureId = $fixture->fixture_id;
-
-        $homeTeamData = json_decode($fixture->home_team_squad, true);
-        if (empty($homeTeamData)) {
-            throw new \Exception(' missing home team squad data');
-        }
-        $homeTeamId = $homeTeamData[0]['team']['id'];
-
-        $awayTeamData = json_decode($fixture->away_team_squad, true);
-        if (empty($awayTeamData)) {
-            throw new \Exception(' missing away team squad data');
-        }
-        $awayTeamId = $awayTeamData[0]['team']['id'];
+        $this->leagueId = $fixture->league_id;
+        $this->seasonId = $fixture->season_id;
 
         $fixtureData = json_decode($fixture->fixtures, true);
         if (empty($fixtureData)) {
@@ -296,10 +295,13 @@ class ApiFootballService
 
         // Get home team squad and save
         $saved = false;
-        $homeTeamSquad = $this->cleanData($this->getSquads($homeTeamId), self::DATA_TYPE_HOME_TEAM_SQUAD);
+        $homeTeamSquad = $this->getSquads($fixture->home_team_id);
+        $homeTeamLogo = $homeTeamSquad[0]['team']['logo'];
+        $homeTeamSquad = $this->cleanData($homeTeamSquad, self::DATA_TYPE_HOME_TEAM_SQUAD);
         if (!empty($homeTeamSquad)) {
             $saved = $this->fixtures->store([
                 'fixture_id' => $fixtureId,
+                'home_logo' => $homeTeamLogo,
                 'home_team_squad' => json_encode($homeTeamSquad)
             ]);
         }
@@ -311,10 +313,13 @@ class ApiFootballService
 
         // Get away team squad and save
         $saved = false;
-        $awayTeamSquads = $this->cleanData($this->getSquads($awayTeamId), self::DATA_TYPE_AWAY_TEAM_SQUAD);
+        $awayTeamSquad = $this->getSquads($fixture->away_team_id);
+        $awayTeamLogo = $awayTeamSquad[0]['team']['logo'];
+        $awayTeamSquads = $this->cleanData($awayTeamSquad, self::DATA_TYPE_AWAY_TEAM_SQUAD);
         if (!empty($awayTeamSquads)) {
             $saved = $this->fixtures->store([
                 'fixture_id' => $fixtureId,
+                'away_logo' => $awayTeamLogo,
                 'away_team_squad' => json_encode($awayTeamSquads)
             ]);
         }
@@ -596,14 +601,15 @@ class ApiFootballService
      * @param array $keysToRemove
      * @return array
      */
-    private function removeKeys(array $array, array $keysToRemove): array {
+    private function removeKeys(array $array, array $keysToRemove, array $keysToSkip = []): array
+    {
         foreach ($array as $key => &$value) {
-            // If the current key is in the list of keys to remove, unset it
-            if (in_array($key, $keysToRemove, true)) {
+            // If the current key is in the list of keys to remove and not in the list of keys to skip, unset it
+            if (in_array($key, $keysToRemove, true) && !in_array($key, $keysToSkip, true)) {
                 unset($array[$key]);
             } elseif (is_array($value)) {
                 // If the value is an array, recurse
-                $value = $this->removeKeys($value, $keysToRemove);
+                $value = $this->removeKeys($value, $keysToRemove, $keysToSkip);
             }
         }
 
