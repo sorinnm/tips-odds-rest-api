@@ -121,15 +121,24 @@ class ExportWordpress extends Command
             throw new \Exception(' is not pending export to WordPress >>> Status: ' . $generation->status);
         }
 
-        $response = $this->wordpressService->exportPost($fixture);
+        $response = $this->wordpressService->export($fixture);
         Log::channel('wordpress')->debug("#$fixture->fixture_id | $this->homeTeam - $this->awayTeam: WordPress response: " . JSON::encode($response));
 
         // set generation to status=complete if OK
-        if (isset($response['id']) && isset($response['link'])) {
-            $this->generatorModel->store([
+        if (!empty($response) && isset($response['id']) && isset($response['link'])) {
+            $saveData = [
                 'fixture_id' => $fixture->fixture_id,
+                'url' => $response['link'],
                 'status' => TextGenerator::STATUS_COMPLETE
-            ]);
+            ];
+
+            if ($response['entity_type'] == $this->wordpressService::EXPORT_TYPE_PAGE) {
+                $saveData['page_id'] = $response['id'];
+            } elseif ($response['entity_type'] == $this->wordpressService::EXPORT_TYPE_POST) {
+                $saveData['post_id'] = $response['id'];
+            }
+
+            $this->generatorModel->store($saveData);
 
             $postData['response'] = $response;
             $postData['report']['ID'] = $fixture->fixture_id;

@@ -13,7 +13,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class WordpressService
 {
+    const EXPORT_TYPE_POST = 'post';
+    const EXPORT_TYPE_PAGE = 'page';
+
     const WORDPRESS_POST_ENDPOINT = '/wp-json/wp/v2/posts';
+    const WORDPRESS_PAGE_ENDPOINT = '/wp-json/wp/v2/pages';
+
     public function __construct(
         protected TextGenerator $generatorModel)
     {}
@@ -21,7 +26,7 @@ class WordpressService
     /**
      * @throws \Exception
      */
-    public function exportPost(Fixtures $fixture)
+    public function export(Fixtures $fixture, $exportType = self::EXPORT_TYPE_PAGE)
     {
         $matchDate = $homeTeam = $awayTeam = '';
         $generation = $this->generatorModel->getGeneration($fixture->fixture_id);
@@ -59,11 +64,28 @@ class WordpressService
             'categories' => [$leagueCategoryId, $countryCategoryId, $sportCategoryId]
         ];
 
-        return $this->callAPI(
-            Request::METHOD_POST,
-            env('WORDPRESS_HOST') . self::WORDPRESS_POST_ENDPOINT,
-            $payload
-        );
+        $result = [];
+
+        switch ($exportType) {
+            case self::EXPORT_TYPE_POST:
+                $result = $this->callAPI(
+                    Request::METHOD_POST,
+                    env('WORDPRESS_HOST') . self::WORDPRESS_POST_ENDPOINT,
+                    $payload
+                );
+                $result['entity_type'] = self::EXPORT_TYPE_POST;
+                break;
+            case self::EXPORT_TYPE_PAGE:
+                $result = $this->callAPI(
+                    Request::METHOD_POST,
+                    env('WORDPRESS_HOST') . self::WORDPRESS_PAGE_ENDPOINT,
+                    $payload
+                );
+                $result['entity_type'] = self::EXPORT_TYPE_PAGE;
+                break;
+        }
+
+        return $result;
     }
 
     /**
