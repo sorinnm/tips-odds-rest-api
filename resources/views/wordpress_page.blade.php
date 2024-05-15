@@ -19,45 +19,40 @@
 <!-- /wp:paragraph -->
 
 @php
-//    $topPredictions = $second_paragraph['top_3_predictions'];
-//    foreach ($second_paragraph['top_3_predictions'] as $prediction) {
-//        if (is_array($prediction)) {
-//            $keys = array_keys($prediction);
-//            if (is_array($prediction[$keys[0]])) {
-//                $topPredictions = $prediction;
-//            }
-//        } else {
-//            $topPredictions = $second_paragraph['top_3_predictions'];
-//        }
-//    }
+    function parseJson($arr, $key1 = 'title', $key2 = 'reason') {
+        $results = [];
 
-function parsePredictions($data): array
-{
-    $result = [];
-    foreach ($data as $key => $value) {
-        if (is_array($value)) {
-            foreach ($value as $subKey => $subValue) {
-                if (is_array($subValue)) {
-                    parsePredictions($subValue);
+        function recursiveParse($item, &$results, $key1, $key2) {
+            foreach ($item as $key => $value) {
+                if (is_array($value)) {
+                    recursiveParse($value, $results, $key1, $key2);
                 } else {
-                    $result[$subKey] = $subValue;
+                    if (!isset($results[$key1])) {
+                        $results[$key1] = $value;
+                    } elseif (!isset($results[$key2])) {
+                        $results[$key2] = $value;
+                    }
+
+                    if (isset($results[$key1]) && isset($results[$key2])) {
+                        $results[] = [$key1 => $results[$key1], $key2 => $results[$key2]];
+                        unset($results[$key1], $results[$key2]);
+                    }
                 }
             }
-        } else {
-           $result[$key] = $value;
         }
+
+        recursiveParse($arr, $results, $key1, $key2);
+
+        return $results;
     }
 
-    return $result;
-}
-
-$topPredictions = parsePredictions($second_paragraph['top_3_predictions']);
+    $topPredictions = parseJson($second_paragraph['top_3_predictions']);
 @endphp
 
 
-@foreach ($topPredictions as $prediction => $reason)
-        <!-- wp:paragraph -->
-    <p><strong>{{ $prediction }}</strong>: {{ $reason }}</p>
+@foreach ($topPredictions as $prediction)
+    <!-- wp:paragraph -->
+    <p><strong>{{ $prediction['title'] }}</strong>: {{ $prediction['reason'] }}</p>
     <!-- /wp:paragraph -->
 @endforeach
 

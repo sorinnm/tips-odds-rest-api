@@ -51,7 +51,7 @@ class ExportWordpress extends Command
         $this->registerCustomTableStyle();
         $headers = ['ID', 'Match', 'Updated At', 'WordPress'];
 
-        try {
+//        try {
             switch ($fixtureId) {
                 case 'all':
                     // Get all 'pending' generations and post to WordPress
@@ -82,10 +82,10 @@ class ExportWordpress extends Command
                 default:
                     Log::channel('wordpress')->error("Invalid input");
             }
-        } catch (\Throwable $exception) {
-            Log::channel('wordpress')->error("$this->countryName | $this->leagueName | $this->round: $this->homeTeam - $this->awayTeam - #" . $fixtureId . $exception->getMessage());
-            error("$this->countryName | $this->leagueName | $this->round: $this->homeTeam - $this->awayTeam - #" . $fixtureId . ' >>> ' . $exception->getMessage());
-        }
+//        } catch (\Throwable $exception) {
+//            Log::channel('wordpress')->error("$this->countryName | $this->leagueName | $this->round: $this->homeTeam - $this->awayTeam - #" . $fixtureId . $exception->getMessage());
+//            error("$this->countryName | $this->leagueName | $this->round: $this->homeTeam - $this->awayTeam - #" . $fixtureId . ' >>> ' . $exception->getMessage());
+//        }
     }
 
     /**

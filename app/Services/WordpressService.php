@@ -49,9 +49,7 @@ class WordpressService
 
         $league = Leagues::all()->where('api_football_id', $fixture->league_id)->first();
         $authorId = $league->country->author_id;
-        $leagueCategoryId = $league->category_id;
-        $countryCategoryId = $league->country->category_id;
-        $sportCategoryId = $league->country->sport->category_id;
+
         $homeLogo = $fixture->home_logo;
         $awayLogo = $fixture->away_logo;
 
@@ -62,12 +60,21 @@ class WordpressService
             'content' => $html,
             'status' => 'draft',
             'author' => $authorId,
-            'categories' => [$leagueCategoryId, $countryCategoryId, $sportCategoryId],
             'template'=> 'matchpage',
             'acf' => [
                 'match_title' => $matchTitleField
             ]
         ];
+
+        if (self::EXPORT_TYPE_POST === $exportType) {
+            $payload['categories'] = [
+                $league->category_id,
+                $league->country->category_id,
+                $league->country->sport->category_id
+            ];
+        } elseif (self::EXPORT_TYPE_PAGE) {
+            $payload['parent'] = $league->page_id;
+        }
 
         switch ($exportType) {
             case self::EXPORT_TYPE_POST:
