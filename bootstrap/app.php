@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         apiPrefix: 'v1'
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->redirectGuestsTo('/admin');
         $middleware->alias([
             'abilities' => CheckAbilities::class,
             'ability' => CheckForAnyAbility::class,

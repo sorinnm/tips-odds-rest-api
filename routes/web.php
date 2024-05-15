@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Response;
 use Carbon\Carbon;
 use App\Http\Controllers\FixtureController;
 
@@ -16,21 +16,19 @@ Route::get('/timestamp', function () {
 
 Route::get('/fixtures', [FixtureController::class, 'index']);
 Route::post('/fixtures', [FixtureController::class, 'save']);
-//Route::get('/fixtures/{id}', [FixtureController::class, 'show']);
 
-Route::post('/json-escaper', function () {
-    // Get the JSON data from the request body
-    //$data = $request->getBody()->getContents();
+// admin
+Route::prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'login']);
+    Route::post('/', [AdminController::class, 'authenticate']);
 
-    // Check if data is not empty and is a valid JSON
-    // if (!empty($data)) {
-    //     // Escape all double quotes in the JSON string
-    // $escapedString = str_replace('"', '\"', $data);
-    //  trim($escapedString, '[');
-    //     trim($escapedString, ']');
-    // }
-    // Send the escaped string as response
-    // $response->getBody()->write(json_encode(['data' => $escapedString]));
-    //     return $response->withHeader('Content-Type', 'application/json');
-    // return response()->json(['timestamp' => $timestamp]);
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'index']);
+
+        // admin user
+        Route::prefix('user')->group(function () {
+            Route::get('/logout', [AdminController::class, 'logout']);
+        });
+    });
+
 });
