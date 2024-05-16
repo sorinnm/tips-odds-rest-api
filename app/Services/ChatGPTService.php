@@ -57,7 +57,7 @@ class ChatGPTService
             Use long-tail keywords when possible, like first team vs second team match, first team vs second team preview, first team vs second team prediction, first team second team tips, first team second team bets.
             Don't use the exact words \"first team\" or \"second team\", replace them with the actual name of the teams. Don't use double quotes for the keywords, just integrate them naturally into text.
             Fill the values of the following JSON object and print me the result. This object structure is very strict in terms of keys defined. Take this structure as a precise and strict to fill in the values of the keys with content: {\"first_paragraph\": {\"title\": \"\",\"content\": \"\"},\"second_paragraph\": {\"title\": \"\",\"content\": \"\",\"top_3_predictions\": [{\"prediction\": \"\",\"reason\": \"\"},{\"prediction\": \"\",\"reason\": \"\"},{\"prediction\":\"\",\"reason\": \"\"}]},\"third_paragraph\": {\"title\": \"\",\"content\": \"\",\"head_to_head\": [{\"match\": \"\"},{\"match\": \"\"},{\"match\": \"\"},{\"match\": \"\"},{\"match\": \"\"}]},\"forth_paragraph\": {\"title\": \"\",\"content\": \"\"}}
-            'head_to_head' key has 'match' as child (example: 'Boca Juniors vs Atletico Tucuman - 1-0 - Jan 30, 2023')"]
+            'head_to_head' key has 'match' as child (example: 'Boca Juniors vs Atletico Tucuman - 1-0 - Jan 30, 2023'). Please do not list the head to head matches inside the 'content' of the 'third_paragraph' key."]
         ];
 
         // Add to messages the JSON contents for ChatGPT processing
