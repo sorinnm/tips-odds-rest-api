@@ -51,8 +51,8 @@ class TextGenerator extends Model
             ->where('status', '=', self::STATUS_PENDING)->first();
 
         $generation = trim($generation->generation, '```json');
-        $generation = trim($generation->generation, '```');
-        $generation = trim($generation->generation, '\n');
+        $generation = trim($generation, '```');
+        $generation = trim($generation, '\n');
         return trim($generation);
     }
 }
