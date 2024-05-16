@@ -35,7 +35,7 @@ class WordpressService
             throw new \Exception("#{$fixture->fixture_id} | $homeTeam - $awayTeam: No generation found");
         }
 
-        $generation = Json::decode($generation);
+        $generation = Json::decode($generation, true);
         $fixtureData = json_decode($fixture->fixtures, true);
 
         if (!empty($fixtureData)) {
