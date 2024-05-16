@@ -115,10 +115,13 @@ class ExportWordpress extends Command
      */
     public function processGeneration(Fixtures $fixture): array
     {
-        $generation = TextGenerator::all()->where('fixture_id', $fixture->fixture_id)->first();
-        if ($generation->status !== TextGenerator::STATUS_PENDING) {
-            Log::channel('wordpress')->warning($fixture->fixture_id . ' is not pending export to WordPress >>> Status: ' . $generation->status);
-            throw new \Exception(' is not pending export to WordPress >>> Status: ' . $generation->status);
+        $generation = TextGenerator::all()
+            ->where('fixture_id', $fixture->fixture_id)
+            ->where('status', TextGenerator::STATUS_PENDING)
+            ->first();
+        if (empty($generation)) {
+            Log::channel('wordpress')->warning($fixture->fixture_id . ' could not found any generation for export');
+            throw new \Exception(' could not found any generation for export');
         }
 
         $response = $this->wordpressService->export($fixture);

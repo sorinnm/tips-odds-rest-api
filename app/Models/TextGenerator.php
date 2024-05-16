@@ -50,6 +50,6 @@ class TextGenerator extends Model
             ->where('fixture_id', $fixtureId)
             ->where('status', '=', self::STATUS_PENDING)->first();
 
-        return trim(trim($generation->generation), '```json');
+        return trim(trim(trim($generation->generation, '```'), '```json'));
     }
 }
