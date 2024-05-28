@@ -12,6 +12,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -21,10 +22,14 @@ class AdminController extends Controller
 
     /**
      * @param Request $request
-     * @return View
+     * @return View|RedirectResponse
      */
-    public function login(Request $request): View
+    public function login(Request $request)
     {
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
+
         return view('admin/login');
     }
 
@@ -121,6 +126,9 @@ class AdminController extends Controller
     public function logs(Request $request)
     {
         $user = $request->user();
+
+        $files = Storage::disk('local')->files(storage_path('logs'));
+        dd($files);
 
         return view('admin/logs', ['user' => $user, 'pageTitle' => 'Logs']);
     }

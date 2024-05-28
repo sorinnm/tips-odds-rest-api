@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use Carbon\Carbon;
 use App\Http\Controllers\FixtureController;
+use Opcodes\LogViewer\Http\Controllers\IndexController;
 
 Route::get('/', function () {
     return response()->json(['message' => 'Method is not allowed!'], 405);
@@ -23,7 +24,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/', [AdminController::class, 'authenticate']);
 
     Route::middleware(['auth'])->group(function () {
-        Route::get('/dashboard', [AdminController::class, 'index']);
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
         Route::get('/sports', [AdminController::class, 'sports']);
         Route::get('/countries', [AdminController::class, 'countries']);
         Route::get('/leagues', [AdminController::class, 'leagues']);
