@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -15,6 +16,14 @@ class Rounds extends Model
     protected $fillable = ['name', 'season_id', 'start_date', 'created_at', 'updated_at'];
 
     const API_ENDPOINT_ROUNDS = '/fixtures/rounds';
+
+    /**
+     * Get the league associated with the season.
+     */
+    public function season(): BelongsTo
+    {
+        return $this->belongsTo(Seasons::class, 'season_id', 'id');
+    }
 
     /**
      * @return mixed|string|void

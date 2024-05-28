@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Seasons extends Model
 {
@@ -20,5 +20,13 @@ class Seasons extends Model
     public function league(): BelongsTo
     {
         return $this->belongsTo(Leagues::class);
+    }
+
+    /**
+     * Get the user's orders.
+     */
+    public function round(): HasMany
+    {
+        return $this->hasMany(Rounds::class, 'id', 'season_id');
     }
 }

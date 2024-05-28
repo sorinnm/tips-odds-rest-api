@@ -24,6 +24,11 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index']);
+        Route::get('/sports', [AdminController::class, 'sports']);
+        Route::get('/countries', [AdminController::class, 'countries']);
+        Route::get('/leagues', [AdminController::class, 'leagues']);
+        Route::get('/fixtures', [AdminController::class, 'fixtures']);
+        Route::get('/logs', [AdminController::class, 'logs']);
 
         // admin user
         Route::prefix('user')->group(function () {
