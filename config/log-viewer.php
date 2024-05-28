@@ -14,7 +14,7 @@ return [
 
     'api_only' => env('LOG_VIEWER_API_ONLY', false),
 
-    'require_auth_in_production' => true,
+    'require_auth_in_production' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -229,4 +229,5 @@ return [
     'lazy_scan_chunk_size_in_mb' => 50,
 
     'strip_extracted_context' => true,
+    'show_support_link' => false
 ];
