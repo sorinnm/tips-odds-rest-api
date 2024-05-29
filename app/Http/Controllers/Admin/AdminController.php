@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Countries;
 use App\Models\Fixtures;
 use App\Models\Leagues;
@@ -72,30 +73,6 @@ class AdminController extends Controller
             'fixturesStatuses' => $fixturesStatuses,
             'generationsStatuses' => $generationsStatuses,
             'wordpressStatuses' => $wordpressStatuses,
-        ]);
-    }
-
-    public function sports(Request $request)
-    {
-        $user = $request->user();
-        $sports = Sports::all();
-
-        return view('admin/sports', [
-            'user' => $user,
-            'pageTitle' => 'Sports',
-            'sports' => $sports
-        ]);
-    }
-
-    public function countries(Request $request)
-    {
-        $user = $request->user();
-        $countries = Countries::all();
-
-        return view('admin/countries', [
-            'user' => $user,
-            'pageTitle' => 'Countries',
-            'countries' => $countries
         ]);
     }
 

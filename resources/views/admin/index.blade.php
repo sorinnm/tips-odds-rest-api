@@ -205,5 +205,6 @@
 </div>
 
 @include('admin/layout/body-scripts')
+<script src="{{ asset('js/bootstrap/dashboard.js') }}"></script>
 </body>
 </html>
