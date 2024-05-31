@@ -44,15 +44,18 @@
         </ul>
         <hr>
         <div class="dropdown">
-            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                <strong>{{ $user->name }}</strong>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" style="">
-                <li><a class="dropdown-item" href="#">Settings</a></li>
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{{ url('/admin/user/logout') }}">Sign out</a></li>
-            </ul>
+            <div class="d-flex align-items-center justify-content-between">
+                <a href="#" class=" text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                    <strong>{{ $user->name }}</strong>
+                </a>
+                <span class="fs-6 text-secondary">v0.0.1</span>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" style="">
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{{ route('admin.logout') }}">Sign out</a></li>
+                </ul>
+            </div>
         </div>
     </div>

@@ -60,7 +60,7 @@ Route::prefix('admin')->group(function () {
 
         // admin user
         Route::prefix('user')->group(function () {
-            Route::get('/logout', [AdminController::class, 'logout']);
+            Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');
         });
     });
 
