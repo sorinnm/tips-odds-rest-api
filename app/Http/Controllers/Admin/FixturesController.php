@@ -93,6 +93,16 @@ class FixturesController extends Controller
         $homeTeam = $fixtureData[0]['teams']['home']['name'];
         $awayTeam = $fixtureData[0]['teams']['away']['name'];
 
+        $modalData = [
+            json_encode(json_decode($fixture->fixtures, true), JSON_PRETTY_PRINT),
+            json_encode(json_decode($fixture->home_team_squad, true), JSON_PRETTY_PRINT),
+            json_encode(json_decode($fixture->away_team_squad, true), JSON_PRETTY_PRINT),
+            json_encode(json_decode($fixture->injuries, true), JSON_PRETTY_PRINT),
+            json_encode(json_decode($fixture->predictions, true), JSON_PRETTY_PRINT),
+            json_encode(json_decode($fixture->head_to_head, true), JSON_PRETTY_PRINT),
+            json_encode(json_decode($fixture->bets, true), JSON_PRETTY_PRINT),
+        ];
+
         $breadcrumbs = [
             $fixture->league->country->sport->name,
             $fixture->league->country->name,
@@ -112,7 +122,8 @@ class FixturesController extends Controller
             'breadcrumbs' => $breadcrumbs,
             'league' => $league,
             'countries' => $countries,
-            'sports' => $sports
+            'sports' => $sports,
+            'modalData' => $modalData
         ]);
     }
 

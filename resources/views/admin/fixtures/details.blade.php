@@ -36,14 +36,38 @@
                 <div class="row">
                     <div class="col-6">
                         <ul class="list-group">
-                            <li class="list-group-item list-group-item font-weight-bold d-flex justify-content-between align-items-center"><strong>Data Integrity</strong> <button type="button" title="Details" class="btn btn-sm btn-primary">Re-import</button></li>
-                            <li data-bs-toggle="modal" data-bs-target="#jsonContentModal" class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">Fixtures Data <span class="badge rounded-pill bg-success">OK</span></li>
-                            <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">Home Team Squad <span class="badge rounded-pill bg-success">OK</span></li>
-                            <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">Away Team Squad <span class="badge rounded-pill bg-success">OK</span></li>
-                            <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">Injuries <span class="badge rounded-pill bg-danger">MISSING</span></li>
-                            <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">Predictions <span class="badge rounded-pill bg-success">OK</span></li>
-                            <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">Head To Head <span class="badge rounded-pill bg-success">OK</span></li>
-                            <li class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center">Bets <span class="badge rounded-pill bg-warning">CHECK</span></li>
+                            <li class="list-group-item list-group-item font-weight-bold d-flex justify-content-between align-items-center">
+                                <strong>Data Integrity</strong>
+                                <button type="button" title="Details" class="btn btn-sm btn-primary">Re-import</button>
+                            </li>
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-success d-flex justify-content-between align-items-center dataIntegrity">
+                                <span class="di_title">Fixtures Data</span>
+                                <span class="badge rounded-pill bg-success">OK</span>
+                            </li>
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-success d-flex justify-content-between align-items-center dataIntegrity">
+                                <span class="di_title">Home Team Squad</span>
+                                <span class="badge rounded-pill bg-success">OK</span>
+                            </li>
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-success d-flex justify-content-between align-items-center dataIntegrity">
+                                <span class="di_title">Away Team Squad</span>
+                                <span class="badge rounded-pill bg-success">OK</span>
+                            </li>
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center dataIntegrity">
+                                <span class="di_title">Injuries</span>
+                                <span class="badge rounded-pill bg-danger">MISSING</span>
+                            </li>
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-success d-flex justify-content-between align-items-center dataIntegrity">
+                                <span class="di_title">Predictions</span>
+                                <span class="badge rounded-pill bg-success">OK</span>
+                            </li>
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-success d-flex justify-content-between align-items-center dataIntegrity">
+                                <span class="di_title">Head To Head</span>
+                                <span class="badge rounded-pill bg-success">OK</span>
+                            </li>
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center dataIntegrity">
+                                <span class="di_title">Bets</span>
+                                <span class="badge rounded-pill bg-warning">CHECK</span>
+                            </li>
                         </ul>
                     </div>
                     <div class="col-6">
@@ -97,36 +121,35 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="jsonContentModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-floating">
-                <textarea class="form-control" placeholder="Leave a comment here" style="height: 100px">
-                    {{ json_encode(json_decode($fixture->home_team_squad), JSON_PRETTY_PRINT) }}
+@foreach($modalData as $json)
+    <!-- Modal -->
+    <div class="modal fade jsonContentModal" tabindex="-1" aria-labelledby="jsonModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <textarea class="form-control" rows="20" placeholder="">
+                    {{ $json }}
                 </textarea>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+@endforeach
+
 
 <script>
-    $(document).on('click','.deleteButton',function(){
-        var id = $(this).attr('data-id');
-        var name = $(this).attr('data-name');
-        $('input[name="modal_id"]').val(id);
-        $('.modalName').text(name);
-        $('#confirmDeleteModal').modal('show');
+    $(document).on('click','.dataIntegrity',function(){
+        var title = $(this).children('.di_title').text();
+        $('.modal-title').text(title);
+        $('#jsonContentModal').modal('show');
     });
 </script>
 
