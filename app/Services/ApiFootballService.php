@@ -115,10 +115,12 @@ class ApiFootballService
             $saved = false;
             $fixtureMatch = $this->cleanData($this->getFixtureMatch($fixtureId), self::DATA_TYPE_FIXTURES);
             if (!empty($fixtureMatch)) {
+                $leagueId = Leagues::all()->where('api_football_id', $this->leagueId)->first()->id;
+                $seasonId = Seasons::all()->where('league_id', $leagueId)->first()->id;
                 $saved = $this->fixtures->store([
                     'fixture_id' => $fixtureId,
-                    'league_id' => $this->leagueId,
-                    'season_id' => $this->seasonId,
+                    'league_id' => $leagueId,
+                    'season_id' => $seasonId,
                     'round' => $this->round,
                     'fixtures' => json_encode($fixtureMatch),
                     'home_team_id' => $homeTeamId,

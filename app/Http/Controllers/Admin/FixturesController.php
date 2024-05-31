@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class LeaguesController extends Controller
+class FixturesController extends Controller
 {
     public function __construct(
         protected AdminService $adminService
@@ -26,12 +26,12 @@ class LeaguesController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $leagues = Leagues::all();
+        $fixtures = Fixtures::all();
 
-        return view('admin.leagues.index', [
+        return view('admin.fixtures.index', [
             'user' => $user,
-            'pageTitle' => 'Leagues',
-            'leagues' => $leagues
+            'pageTitle' => 'Fixtures',
+            'fixtures' => $fixtures
         ]);
     }
 

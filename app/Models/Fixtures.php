@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Fixtures extends Model
 {
@@ -81,5 +82,10 @@ class Fixtures extends Model
         return Fixtures::all()
             ->where('fixture_id', $fixtureId)
             ->where('status', '=', self::STATUS_PENDING);
+    }
+
+    public function league(): BelongsTo
+    {
+        return $this->belongsTo(Leagues::class);
     }
 }

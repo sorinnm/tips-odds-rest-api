@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CountriesController;
+use App\Http\Controllers\Admin\FixturesController;
 use App\Http\Controllers\Admin\LeaguesController;
 use App\Http\Controllers\Admin\SportsController;
 use App\Http\Controllers\FixtureController;
@@ -55,7 +56,10 @@ Route::prefix('admin')->group(function () {
             Route::delete('/delete', [LeaguesController::class, 'delete'])->name('leagues.delete');
         });
 
-        Route::get('/fixtures', [AdminController::class, 'fixtures']);
+        Route::prefix('fixtures')->group(function () {
+            Route::get('/', [FixturesController::class, 'index'])->name('fixtures.index');
+        });
+
         Route::get('/logs', [AdminController::class, 'logs']);
 
         // admin user

@@ -22,9 +22,6 @@ class Seasons extends Model
         return $this->belongsTo(Leagues::class);
     }
 
-    /**
-     * Get the user's orders.
-     */
     public function round(): HasMany
     {
         return $this->hasMany(Rounds::class, 'id', 'season_id');
