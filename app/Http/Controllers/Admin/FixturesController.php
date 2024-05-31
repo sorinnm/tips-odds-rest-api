@@ -85,16 +85,31 @@ class FixturesController extends Controller
         }
     }
 
-    public function edit(Request $request, int $id)
+    public function details(Request $request, int $id)
     {
         $user = $request->user();
+        $fixture = Fixtures::find($id);
+        $fixtureData = json_decode($fixture->fixtures, true);
+        $homeTeam = $fixtureData[0]['teams']['home']['name'];
+        $awayTeam = $fixtureData[0]['teams']['away']['name'];
+
+        $breadcrumbs = [
+            $fixture->league->country->sport->name,
+            $fixture->league->country->name,
+            $fixture->league->name,
+            $fixture->league->season->name,
+            $fixture->round
+        ];
+
         $league = Leagues::find($id);
         $countries = Countries::all();
         $sports = Sports::all();
 
-        return view('admin.leagues.edit', [
+        return view('admin.fixtures.details', [
             'user' => $user,
-            'pageTitle' => "Edit league {$league->name}",
+            'pageTitle' => "$homeTeam vs $awayTeam",
+            'fixture' => $fixture,
+            'breadcrumbs' => $breadcrumbs,
             'league' => $league,
             'countries' => $countries,
             'sports' => $sports

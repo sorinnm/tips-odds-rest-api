@@ -103,7 +103,9 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <button type="button" title="Details" class="btn btn-info"><i class="bi bi-list"></i></button>
+                                        <a href="{{ route('fixtures.details', ['id' => $fixture->id]) }}">
+                                            <button type="button" title="Details" class="btn btn-info"><i class="bi bi-list"></i></button>
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

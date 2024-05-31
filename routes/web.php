@@ -58,6 +58,7 @@ Route::prefix('admin')->group(function () {
 
         Route::prefix('fixtures')->group(function () {
             Route::get('/', [FixturesController::class, 'index'])->name('fixtures.index');
+            Route::get('/details/{id}', [FixturesController::class, 'details'])->name('fixtures.details');
         });
 
         Route::get('/logs', [AdminController::class, 'logs']);
