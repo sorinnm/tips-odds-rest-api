@@ -83,6 +83,8 @@
             </div>
             @if (Session::has('message'))
                 <div class="alert alert-info">{{ Session::get('message') }}</div>
+            @elseif(Session::has('error_message'))
+                <div class="alert alert-danger">{{ Session::get('error_message') }}</div>
             @endif
             <div class="table-responsive small">
                 <table class="table table-striped table-sm">

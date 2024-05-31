@@ -76,18 +76,6 @@ class AdminController extends Controller
         ]);
     }
 
-    public function leagues(Request $request)
-    {
-        $user = $request->user();
-        $leagues = Leagues::all();
-
-        return view('admin/leagues', [
-            'user' => $user,
-            'pageTitle' => 'Leagues',
-            'leagues' => $leagues
-        ]);
-    }
-
     public function fixtures(Request $request)
     {
         $user = $request->user();

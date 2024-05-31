@@ -6,25 +6,25 @@
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
             <li>
-                <a href="{{ url('/admin/dashboard') }}" class="nav-link text-white">
+                <a href="{{ route('dashboard') }}" class="nav-link text-white">
                     <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
                     Dashboard
                 </a>
             </li>
             <li>
-                <a href="{{ url('/admin/sports') }}" class="nav-link text-white">
+                <a href="{{ route('sports.index') }}" class="nav-link text-white">
                     <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
                     Sports
                 </a>
             </li>
             <li>
-                <a href="{{ url('/admin/countries') }}" class="nav-link text-white">
+                <a href="{{ route('countries.index') }}" class="nav-link text-white">
                     <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
                     Countries
                 </a>
             </li>
             <li>
-                <a href="{{ url('/admin/leagues') }}" class="nav-link text-white">
+                <a href="{{ route('leagues.index') }}" class="nav-link text-white">
                     <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
                     Leagues
                 </a>

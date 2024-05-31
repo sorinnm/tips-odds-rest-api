@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CountriesController;
+use App\Http\Controllers\Admin\LeaguesController;
 use App\Http\Controllers\Admin\SportsController;
 use App\Http\Controllers\FixtureController;
 use Carbon\Carbon;
@@ -21,8 +22,8 @@ Route::post('/fixtures', [FixtureController::class, 'save']);
 
 // admin
 Route::prefix('admin')->group(function () {
-    Route::get('/', [AdminController::class, 'login']);
-    Route::post('/', [AdminController::class, 'authenticate']);
+    Route::get('/', [AdminController::class, 'login'])->name('admin.login');
+    Route::post('/', [AdminController::class, 'authenticate'])->name('admin.authenticate');
 
     Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
@@ -45,7 +46,15 @@ Route::prefix('admin')->group(function () {
             Route::delete('/delete', [CountriesController::class, 'delete'])->name('countries.delete');
         });
 
-        Route::get('/leagues', [AdminController::class, 'leagues']);
+        Route::prefix('leagues')->group(function () {
+            Route::get('/', [LeaguesController::class, 'index'])->name('leagues.index');
+            Route::get('/add', [LeaguesController::class, 'add'])->name('leagues.add');
+            Route::post('/add', [LeaguesController::class, 'save'])->name('leagues.save');
+            Route::get('/edit/{id}', [LeaguesController::class, 'edit'])->name('leagues.edit');
+            Route::put('/edit/{id}', [LeaguesController::class, 'update'])->name('leagues.update');
+            Route::delete('/delete', [LeaguesController::class, 'delete'])->name('leagues.delete');
+        });
+
         Route::get('/fixtures', [AdminController::class, 'fixtures']);
         Route::get('/logs', [AdminController::class, 'logs']);
 
