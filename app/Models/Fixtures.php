@@ -23,6 +23,7 @@ class Fixtures extends Model
         'head_to_head',
         'bets',
         'status',
+        'step',
         'home_log',
         'home_team_id',
         'away_logo',
@@ -36,6 +37,22 @@ class Fixtures extends Model
     const STATUS_RUNNING = 'running';
     const STATUS_RETRY = 'retry';
     const STATUS_ERROR = 'error';
+
+    // steps
+    const PROCESS_STEPS = [
+        1  => 'Imported API-Football',
+        2  => 'Data Integrity Error',
+        3  => 'Data Integrity Warning',
+        4  => 'Data Integrity OK',
+        5  => 'AI Generation Fail',
+        6  => 'AI Generation OK',
+        7  => 'Generation Content Fail',
+        8  => 'Generation Content OK',
+        9  => 'Template Validation Fail',
+        10 => 'Template Validation OK',
+        11 => 'Not Published',
+        12 => 'Published'
+    ];
 
     /**
      * @param array $data

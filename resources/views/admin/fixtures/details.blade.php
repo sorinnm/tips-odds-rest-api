@@ -35,38 +35,66 @@
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        <ul class="list-group">
+                        <ul class="list-group dataIntegrityCheck">
                             <li class="list-group-item list-group-item font-weight-bold d-flex justify-content-between align-items-center">
-                                <strong>Data Integrity</strong>
+                                <strong>Data Integrity Check</strong>
                                 <button type="button" title="Details" class="btn btn-sm btn-primary">Re-import</button>
                             </li>
-                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-success d-flex justify-content-between align-items-center dataIntegrity">
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" data-type="fixtures" class="icon-link icon-link-hover list-group-item list-group-item-{{ !empty($fixture->fixtures) ? 'success' : 'danger' }} d-flex justify-content-between align-items-center">
                                 <span class="di_title">Fixtures Data</span>
-                                <span class="badge rounded-pill bg-success">OK</span>
+                                @if(!empty($fixture->fixtures))
+                                    <span class="badge rounded-pill bg-success">OK</span>
+                                @else
+                                    <span class="badge rounded-pill bg-danger">MISSING</span>
+                                @endif
                             </li>
-                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-success d-flex justify-content-between align-items-center dataIntegrity">
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" data-type="home_team_squad" class="list-group-item list-group-item-{{ !empty($fixture->home_team_squad) ? 'success' : 'danger' }} d-flex justify-content-between align-items-center">
                                 <span class="di_title">Home Team Squad</span>
-                                <span class="badge rounded-pill bg-success">OK</span>
+                                @if(!empty($fixture->home_team_squad))
+                                    <span class="badge rounded-pill bg-success">OK</span>
+                                @else
+                                    <span class="badge rounded-pill bg-danger">MISSING</span>
+                                @endif
                             </li>
-                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-success d-flex justify-content-between align-items-center dataIntegrity">
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" data-type="away_team_squad" class="list-group-item list-group-item-{{ !empty($fixture->away_team_squad) ? 'success' : 'danger' }} d-flex justify-content-between align-items-center">
                                 <span class="di_title">Away Team Squad</span>
-                                <span class="badge rounded-pill bg-success">OK</span>
+                                @if(!empty($fixture->away_team_squad))
+                                    <span class="badge rounded-pill bg-success">OK</span>
+                                @else
+                                    <span class="badge rounded-pill bg-danger">MISSING</span>
+                                @endif
                             </li>
-                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center dataIntegrity">
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" data-type="injuries" class="list-group-item list-group-item-{{ !empty($fixture->injuries) ? 'success' : 'danger' }} d-flex justify-content-between align-items-center">
                                 <span class="di_title">Injuries</span>
-                                <span class="badge rounded-pill bg-danger">MISSING</span>
+                                @if(!empty($fixture->injuries))
+                                    <span class="badge rounded-pill bg-success">OK</span>
+                                @else
+                                    <span class="badge rounded-pill bg-danger">MISSING</span>
+                                @endif
                             </li>
-                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-success d-flex justify-content-between align-items-center dataIntegrity">
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" data-type="predictions" class="list-group-item list-group-item-{{ !empty($fixture->predictions) ? 'success' : 'danger' }} d-flex justify-content-between align-items-center">
                                 <span class="di_title">Predictions</span>
-                                <span class="badge rounded-pill bg-success">OK</span>
+                                @if(!empty($fixture->predictions))
+                                    <span class="badge rounded-pill bg-success">OK</span>
+                                @else
+                                    <span class="badge rounded-pill bg-danger">MISSING</span>
+                                @endif
                             </li>
-                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-success d-flex justify-content-between align-items-center dataIntegrity">
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" data-type="head_to_head" class="list-group-item list-group-item-{{ !empty($fixture->head_to_head) ? 'success' : 'danger' }} d-flex justify-content-between align-items-center">
                                 <span class="di_title">Head To Head</span>
-                                <span class="badge rounded-pill bg-success">OK</span>
+                                @if(!empty($fixture->head_to_head))
+                                    <span class="badge rounded-pill bg-success">OK</span>
+                                @else
+                                    <span class="badge rounded-pill bg-danger">MISSING</span>
+                                @endif
                             </li>
-                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center dataIntegrity">
+                            <li data-bs-toggle="modal" data-bs-target=".jsonContentModal" data-type="bets" class="list-group-item list-group-item-{{ !empty($fixture->bets) ? 'success' : 'danger' }} d-flex justify-content-between align-items-center dataIntegrity">
                                 <span class="di_title">Bets</span>
-                                <span class="badge rounded-pill bg-warning">CHECK</span>
+                                @if(!empty($fixture->bets))
+                                    <span class="badge rounded-pill bg-success">OK</span>
+                                @else
+                                    <span class="badge rounded-pill bg-danger">MISSING</span>
+                                @endif
                             </li>
                         </ul>
                     </div>
@@ -74,44 +102,36 @@
                         <div class="card">
                             <div class="card-header font-weight-bold"><strong>Status</strong></div>
                             <div class="card-body bg-success d-flex justify-content-between align-items-center">
-                                <h5 class="card-title">Fixture imported from API-Football</h5>
+                                <h5 class="card-title"><span class="badge rounded-pill bg-dark">1</span> Fixture imported from API-Football</h5>
                             </div>
-                            <div class="card-body bg-success d-flex justify-content-between align-items-center">
-                                <h5 class="card-title">Data Integrity Check</h5>
+                            <div class="card-body bg-{{ $fixture->step == 2 ? 'danger' : ($fixture->step == 3 ? 'warning' : ($fixture->step == 4 ? 'success' : 'secondary')) }} d-flex justify-content-between align-items-center">
+                                <h5 class="card-title"><span class="badge rounded-pill bg-dark">2</span> Data Integrity Check</h5>
                             </div>
-                            <div class="card-body bg-warning d-flex justify-content-between align-items-center">
-                                <h5 class="card-title">Data Integrity Check</h5>
+                            <div class="card-body bg-{{ $fixture->step == 5 ? 'danger' : ($fixture->step == 6 ? 'success' : 'secondary') }} d-flex justify-content-between align-items-center">
+                                <h5 class="card-title"><span class="badge rounded-pill bg-dark">3</span> ChatGPT generation</h5>
+                                @if($fixture->step == 4)
+                                    <a href="#" class="btn btn-info">Start</a>
+                                @elseif($fixture->step == 5)
+                                    <a href="#" class="btn btn-secondary">Retry</a>
+                                @endif
                             </div>
-                            <div class="card-body bg-danger d-flex justify-content-between align-items-center">
-                                <h5 class="card-title">Data Integrity Check</h5>
+                            <div class="card-body bg-{{ $fixture->step == 7 ? 'danger' : ($fixture->step == 8 ? 'success' : 'secondary') }} d-flex justify-content-between align-items-center">
+                                <h5 class="card-title"><span class="badge rounded-pill bg-dark">4</span> Generation content check</h5>
+                                @if($fixture->step == 7)
+                                    <a href="#" class="btn btn-secondary">Retry</a>
+                                @endif
                             </div>
-                            <div class="card-body bg-success d-flex justify-content-between align-items-center">
-                                <h5 class="card-title">ChatGPT generation</h5>
+                            <div class="card-body bg-{{ $fixture->step == 9 ? 'danger' : ($fixture->step == 10 ? 'success' : 'secondary') }} d-flex justify-content-between align-items-center">
+                                <h5 class="card-title"><span class="badge rounded-pill bg-dark">5</span> Template validation</h5>
+                                @if($fixture->step == 9)
+                                    <a href="#" class="btn btn-secondary">Retry</a>
+                                @endif
                             </div>
-                            <div class="card-body bg-danger d-flex justify-content-between align-items-center">
-                                <h5 class="card-title">ChatGPT generation</h5>
-                                <a href="#" class="btn btn-secondary">Retry</a>
-                            </div>
-                            <div class="card-body bg-success d-flex justify-content-between align-items-center">
-                                <h5 class="card-title">Generation content check</h5>
-                            </div>
-                            <div class="card-body bg-danger d-flex justify-content-between align-items-center">
-                                <h5 class="card-title">Generation content check</h5>
-                                <a href="#" class="btn btn-secondary">Retry</a>
-                            </div>
-                            <div class="card-body bg-success d-flex justify-content-between align-items-center">
-                                <h5 class="card-title">Template validation</h5>
-                            </div>
-                            <div class="card-body bg-danger d-flex justify-content-between align-items-center">
-                                <h5 class="card-title">Template validation</h5>
-                                <a href="#" class="btn btn-secondary">Retry</a>
-                            </div>
-                            <div class="card-body bg-success d-flex justify-content-between align-items-center">
-                                <h5 class="card-title">Fixture published</h5>
-                            </div>
-                            <div class="card-body bg-danger d-flex justify-content-between align-items-center">
-                                <h5 class="card-title">Fixture published</h5>
-                                <a href="#" class="btn btn-secondary">Retry</a>
+                            <div class="card-body bg-{{ $fixture->step == 11 ? 'danger' : ($fixture->step == 12 ? 'success' : 'secondary') }} d-flex justify-content-between align-items-center">
+                                <h5 class="card-title"><span class="badge rounded-pill bg-dark">6</span> Fixture published</h5>
+                                @if($fixture->step == 11)
+                                    <a href="#" class="btn btn-secondary">Retry</a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -121,35 +141,42 @@
     </div>
 </div>
 
-@foreach($modalData as $json)
-    <!-- Modal -->
-    <div class="modal fade jsonContentModal" tabindex="-1" aria-labelledby="jsonModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                <textarea class="form-control" rows="20" placeholder="">
-                    {{ $json }}
-                </textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save</button>
-                </div>
+<!-- Modal -->
+<div class="modal fade jsonContentModal" tabindex="-1" aria-labelledby="jsonModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control modalContent" rows="20" placeholder=""></textarea>
+            </div>
+            <div class="modal-footer">
+                <buttßon type="button" class="btn btn-info" data-bs-dismiss="modal">Re-import</buttßon>
+                <button type="button" class="btn btn-secondary float-end" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary float-end">Save</button>
             </div>
         </div>
     </div>
-@endforeach
-
+</div>
 
 <script>
-    $(document).on('click','.dataIntegrity',function(){
+    $(document).on('click','.dataIntegrityCheck li',function(){
+        var type = $(this).attr('data-type');
         var title = $(this).children('.di_title').text();
+        $.ajax({
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '{{ route('ajax.admin.fixtures.dataIntegrityCheck') }}',
+            data: {'id': {{ $fixture->id }}, 'type': type},
+            success : function(data){
+                $('.modal-body textarea').text(JSON.stringify(data, null, "\t"));
+            }
+        });
         $('.modal-title').text(title);
-        $('#jsonContentModal').modal('show');
     });
 </script>
 

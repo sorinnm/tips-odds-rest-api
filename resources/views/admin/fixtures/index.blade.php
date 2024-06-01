@@ -12,7 +12,7 @@
         </script>
         <main class="col-md-9 ms-sm-auto col-lg-10 overflow-scroll">
             <div class="container-fluid">
-                <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light gy-2">
+                <nav class="navbar sticky-top navbar-expand-lg navbar-auto bg-auto gy-2">
                     <div class="container-fluid">
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>

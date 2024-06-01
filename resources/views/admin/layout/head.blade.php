@@ -99,10 +99,12 @@
     <!-- Custom styles for this template -->
     <link href="{{ asset('/css/bootstrap/dashboard.css') }}" rel="stylesheet">
     <link href="{{ asset('/css/bootstrap/sidebars.css') }}" rel="stylesheet">
+    <link href="{{ asset('/css/bootstrap/tipsoddspredictions.css') }}" rel="stylesheet">
 
     <!-- Bootstrap select -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
 
     <script src="{{ asset('js/bootstrap/color-modes.js') }}"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>

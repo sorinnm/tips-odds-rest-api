@@ -12,6 +12,12 @@
                 </a>
             </li>
             <li>
+                <a href="{{ url('/admin/fixtures') }}" class="nav-link text-white">
+                    <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+                    Fixtures
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('sports.index') }}" class="nav-link text-white">
                     <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
                     Sports
@@ -27,12 +33,6 @@
                 <a href="{{ route('leagues.index') }}" class="nav-link text-white">
                     <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
                     Leagues
-                </a>
-            </li>
-            <li>
-                <a href="{{ url('/admin/fixtures') }}" class="nav-link text-white">
-                    <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
-                    Fixtures
                 </a>
             </li>
             <li>

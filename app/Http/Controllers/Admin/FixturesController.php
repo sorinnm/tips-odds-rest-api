@@ -176,4 +176,12 @@ class FixturesController extends Controller
 
         return redirect('admin/leagues');
     }
+
+    public function ajaxDataIntegrity(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $fixture = Fixtures::find($request->get('id'));
+        $type = $request->get('type');
+
+        return response()->json(json_decode($fixture->$type, true), 200);
+    }
 }

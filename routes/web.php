@@ -59,6 +59,7 @@ Route::prefix('admin')->group(function () {
         Route::prefix('fixtures')->group(function () {
             Route::get('/', [FixturesController::class, 'index'])->name('fixtures.index');
             Route::get('/details/{id}', [FixturesController::class, 'details'])->name('fixtures.details');
+            Route::post('/data-integrity-check', [FixturesController::class, 'ajaxDataIntegrity'])->name('ajax.admin.fixtures.dataIntegrityCheck');
         });
 
         Route::get('/logs', [AdminController::class, 'logs']);
