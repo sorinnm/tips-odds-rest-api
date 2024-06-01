@@ -12,54 +12,111 @@
         </script>
         <main class="col-md-9 ms-sm-auto col-lg-10 overflow-scroll">
             <div class="container-fluid">
-                <nav class="navbar sticky-top navbar-expand-lg navbar-auto bg-auto gy-2">
-                    <div class="container-fluid">
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Link</a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Dropdown
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" href="#">Action</a></li>
-                                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                                </li>
-                            </ul>
-                            <form class="d-flex">
-                                <input name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                                <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
-                            </form>
-                        </div>
-                    </div>
-                </nav>
-                <div class="row">
+{{--                <nav class="navbar sticky-top navbar-expand-lg navbar-auto bg-light gy-2">--}}
+{{--                    <div class="container-fluid">--}}
+{{--                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">--}}
+{{--                            <span class="navbar-toggler-icon"></span>--}}
+{{--                        </button>--}}
+{{--                        <div class="collapse navbar-collapse" id="navbarSupportedContent">--}}
+{{--                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">--}}
+{{--                                <li class="nav-item">--}}
+{{--                                    <a class="nav-link active" aria-current="page" href="#">Home</a>--}}
+{{--                                </li>--}}
+{{--                                <li class="nav-item">--}}
+{{--                                    <a class="nav-link" href="#">Link</a>--}}
+{{--                                </li>--}}
+{{--                                <li class="nav-item dropdown">--}}
+{{--                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">--}}
+{{--                                        Dropdown--}}
+{{--                                    </a>--}}
+{{--                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">--}}
+{{--                                        <li><a class="dropdown-item" href="#">Action</a></li>--}}
+{{--                                        <li><a class="dropdown-item" href="#">Another action</a></li>--}}
+{{--                                        <li><hr class="dropdown-divider"></li>--}}
+{{--                                        <li><a class="dropdown-item" href="#">Something else here</a></li>--}}
+{{--                                    </ul>--}}
+{{--                                </li>--}}
+{{--                                <li class="nav-item">--}}
+{{--                                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>--}}
+{{--                                </li>--}}
+{{--                            </ul>--}}
+{{--                            <form class="d-flex">--}}
+{{--                                <input name="search" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">--}}
+{{--                                <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>--}}
+{{--                            </form>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                </nav>--}}
+                <div class="row my-2">
                     <div class="col-4">
                         <ul class="list-group">
-                            <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-success">
-                                Success <span class="badge rounded-pill bg-success">24</span></li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-warning">
-                                Pending <span class="badge rounded-pill bg-warning">12</span></li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-danger">
-                                Error <span class="badge rounded-pill bg-danger">8</span></li>
+                            <li class="list-group-item list-group-item font-weight-bold d-flex justify-content-between align-items-center">
+                                <strong>API-Football</strong>
+                            </li>
+                            <li class=" list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                Imported
+                                <span class="badge rounded-pill bg-success">{{ $stepsCount[1] }}</span>
+                            </li>
+                            <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                Data Integrity OK
+                                <span class="badge rounded-pill bg-success">{{ $stepsCount[4] }}</span>
+                            </li>
+                            <li class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center">
+                                Data Integrity Warning
+                                <span class="badge rounded-pill bg-warning">{{ $stepsCount[3] }}</span>
+                            </li>
+                            <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+                                Data Integrity Error
+                                <span class="badge rounded-pill bg-danger">{{ $stepsCount[2] }}</span>
+                            </li>
                         </ul>
                     </div>
-                    <div class="col-8">
+                    <div class="col-4">
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item font-weight-bold d-flex justify-content-between align-items-center">
+                                <strong>ChatGPT</strong>
+                            </li>
+                            <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                AI Generation OK
+                                <span class="badge rounded-pill bg-success">{{ $stepsCount[6] }}</span>
+                            </li>
+                            <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+                                AI Generation Fail
+                                <span class="badge rounded-pill bg-danger">{{ $stepsCount[5] }}</span>
+                            </li>
+                            <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                Generation Content OK
+                                <span class="badge rounded-pill bg-success">{{ $stepsCount[8] }}</span>
+                            </li>
+                            <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+                                Generation Content Fail
+                                <span class="badge rounded-pill bg-danger">{{ $stepsCount[7] }}</span>
+                            </li>
 
+                        </ul>
+                    </div>
+                    <div class="col-4">
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item font-weight-bold d-flex justify-content-between align-items-center">
+                                <strong>Wordpress</strong>
+                            </li>
+                            <li class=" list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                Template Validation OK
+                                <span class="badge rounded-pill bg-success">{{ $stepsCount[10] }}</span>
+                            </li>
+                            <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+                                Template Validation Fail
+                                <span class="badge rounded-pill bg-danger">{{ $stepsCount[9] }}</span>
+                            </li>
+                            <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                Published
+                                <span class="badge rounded-pill bg-success">{{ $stepsCount[12] }}</span>
+                            </li>
+                            <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+                                Not Published
+                                <span class="badge rounded-pill bg-danger">{{ $stepsCount[11] }}</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
@@ -94,13 +151,7 @@
                                     <td>{{ $fixture->league->season->name }}</td>
                                     <td>{{ $fixture->round }}</td>
                                     <td>
-                                        @if($fixture->status == 'complete')
-                                            <span class="badge text-bg-success">Completed</span>
-                                        @elseif($fixture->status == 'pending')
-                                            <span class="badge text-bg-warning">Pending</span>
-                                        @elseif($fixture->status == 'error')
-                                            <span class="badge text-bg-warning">Error</span>
-                                        @endif
+                                        <span class="badge text-bg-{{ in_array($fixture->step, [2,5,7,9,11]) ? 'danger' : ($fixture->step == 3 ? 'warning' : 'success') }}">{{ \App\Models\Fixtures::PROCESS_STEPS[$fixture->step] }}</span>
                                     </td>
                                     <td>
                                         <a href="{{ route('fixtures.details', ['id' => $fixture->id]) }}">

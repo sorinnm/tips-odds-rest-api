@@ -28,10 +28,26 @@ class FixturesController extends Controller
         $user = $request->user();
         $fixtures = Fixtures::all();
 
+        $stepsCount = [
+            1 => Fixtures::all()->where('step',1)->count(),
+            2 => Fixtures::all()->where('step',2)->count(),
+            3 => Fixtures::all()->where('step',3)->count(),
+            4 => Fixtures::all()->where('step',4)->count(),
+            5 => Fixtures::all()->where('step',5)->count(),
+            6 => Fixtures::all()->where('step',6)->count(),
+            7 => Fixtures::all()->where('step',7)->count(),
+            8 => Fixtures::all()->where('step',8)->count(),
+            9 => Fixtures::all()->where('step',9)->count(),
+            10 => Fixtures::all()->where('step',10)->count(),
+            11 => Fixtures::all()->where('step',11)->count(),
+            12 => Fixtures::all()->where('step',12)->count(),
+        ];
+
         return view('admin.fixtures.index', [
             'user' => $user,
             'pageTitle' => 'Fixtures',
-            'fixtures' => $fixtures
+            'fixtures' => $fixtures,
+            'stepsCount' => $stepsCount
         ]);
     }
 
@@ -93,16 +109,6 @@ class FixturesController extends Controller
         $homeTeam = $fixtureData[0]['teams']['home']['name'];
         $awayTeam = $fixtureData[0]['teams']['away']['name'];
 
-        $modalData = [
-            json_encode(json_decode($fixture->fixtures, true), JSON_PRETTY_PRINT),
-            json_encode(json_decode($fixture->home_team_squad, true), JSON_PRETTY_PRINT),
-            json_encode(json_decode($fixture->away_team_squad, true), JSON_PRETTY_PRINT),
-            json_encode(json_decode($fixture->injuries, true), JSON_PRETTY_PRINT),
-            json_encode(json_decode($fixture->predictions, true), JSON_PRETTY_PRINT),
-            json_encode(json_decode($fixture->head_to_head, true), JSON_PRETTY_PRINT),
-            json_encode(json_decode($fixture->bets, true), JSON_PRETTY_PRINT),
-        ];
-
         $breadcrumbs = [
             $fixture->league->country->sport->name,
             $fixture->league->country->name,
@@ -122,8 +128,7 @@ class FixturesController extends Controller
             'breadcrumbs' => $breadcrumbs,
             'league' => $league,
             'countries' => $countries,
-            'sports' => $sports,
-            'modalData' => $modalData
+            'sports' => $sports
         ]);
     }
 
