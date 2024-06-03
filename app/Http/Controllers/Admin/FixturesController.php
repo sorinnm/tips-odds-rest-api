@@ -6,15 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Countries;
 use App\Models\Fixtures;
 use App\Models\Leagues;
-use App\Models\Seasons;
 use App\Models\Sports;
 use App\Services\AdminService;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class FixturesController extends Controller
@@ -26,7 +23,17 @@ class FixturesController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $fixtures = Fixtures::all();
+        $fixtures = Fixtures::paginate(20);
+
+        if ($request->query('step')) {
+            $fixtures = $fixtures->whereIn('step', explode(',', $request->query('step')));
+        }
+
+        if ($request->query('league')) {
+            $fixtures = Fixtures::whereHas('league', function (Builder $query) use ($request) {
+                $query->where('name', 'like', $request->query('league'));
+            });
+        }
 
         $stepsCount = [
             1 => Fixtures::all()->where('step',1)->count(),

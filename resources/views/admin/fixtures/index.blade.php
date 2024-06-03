@@ -53,22 +53,30 @@
                             <li class="list-group-item list-group-item font-weight-bold d-flex justify-content-between align-items-center">
                                 <strong>API-Football</strong>
                             </li>
-                            <li class=" list-group-item list-group-item-success d-flex justify-content-between align-items-center">
-                                Imported
-                                <span class="badge rounded-pill bg-success">{{ $stepsCount[1] }}</span>
-                            </li>
-                            <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
-                                Data Integrity OK
-                                <span class="badge rounded-pill bg-success">{{ $stepsCount[4] }}</span>
-                            </li>
-                            <li class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center">
-                                Data Integrity Warning
-                                <span class="badge rounded-pill bg-warning">{{ $stepsCount[3] }}</span>
-                            </li>
-                            <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
-                                Data Integrity Error
-                                <span class="badge rounded-pill bg-danger">{{ $stepsCount[2] }}</span>
-                            </li>
+                            <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ route('fixtures.index', ['step' => 1]) }}">
+                                <li class=" list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                    Imported
+                                    <span class="badge rounded-pill bg-success">{{ $stepsCount[1] }}</span>
+                                </li>
+                            </a>
+                            <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ route('fixtures.index', ['step' => 4]) }}">
+                                <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                    Data Integrity OK
+                                    <span class="badge rounded-pill bg-success">{{ $stepsCount[4] }}</span>
+                                </li>
+                            </a>
+                            <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ route('fixtures.index', ['step' => 3]) }}">
+                                <li class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center">
+                                    Data Integrity Warning
+                                    <span class="badge rounded-pill bg-warning">{{ $stepsCount[3] }}</span>
+                                </li>
+                            </a>
+                            <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ route('fixtures.index', ['step' => 2]) }}">
+                                <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+                                    Data Integrity Error
+                                    <span class="badge rounded-pill bg-danger">{{ $stepsCount[2] }}</span>
+                                </li>
+                            </a>
                         </ul>
                     </div>
                     <div class="col-4">
@@ -76,23 +84,30 @@
                             <li class="list-group-item list-group-item font-weight-bold d-flex justify-content-between align-items-center">
                                 <strong>ChatGPT</strong>
                             </li>
-                            <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
-                                AI Generation OK
-                                <span class="badge rounded-pill bg-success">{{ $stepsCount[6] }}</span>
-                            </li>
-                            <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
-                                AI Generation Fail
-                                <span class="badge rounded-pill bg-danger">{{ $stepsCount[5] }}</span>
-                            </li>
-                            <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
-                                Generation Content OK
-                                <span class="badge rounded-pill bg-success">{{ $stepsCount[8] }}</span>
-                            </li>
-                            <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
-                                Generation Content Fail
-                                <span class="badge rounded-pill bg-danger">{{ $stepsCount[7] }}</span>
-                            </li>
-
+                            <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ route('fixtures.index', ['step' => 6]) }}">
+                                <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                    AI Generation OK
+                                    <span class="badge rounded-pill bg-success">{{ $stepsCount[6] }}</span>
+                                </li>
+                            </a>
+                            <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ route('fixtures.index', ['step' => 5]) }}">
+                                <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+                                    AI Generation Fail
+                                    <span class="badge rounded-pill bg-danger">{{ $stepsCount[5] }}</span>
+                                </li>
+                            </a>
+                            <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ route('fixtures.index', ['step' => 8]) }}">
+                                <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                    Generation Content OK
+                                    <span class="badge rounded-pill bg-success">{{ $stepsCount[8] }}</span>
+                                </li>
+                            </a>
+                            <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ route('fixtures.index', ['step' => 7]) }}">
+                                <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+                                    Generation Content Fail
+                                    <span class="badge rounded-pill bg-danger">{{ $stepsCount[7] }}</span>
+                                </li>
+                            </a>
                         </ul>
                     </div>
                     <div class="col-4">
@@ -100,28 +115,36 @@
                             <li class="list-group-item list-group-item font-weight-bold d-flex justify-content-between align-items-center">
                                 <strong>Wordpress</strong>
                             </li>
-                            <li class=" list-group-item list-group-item-success d-flex justify-content-between align-items-center">
-                                Template Validation OK
-                                <span class="badge rounded-pill bg-success">{{ $stepsCount[10] }}</span>
-                            </li>
-                            <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
-                                Template Validation Fail
-                                <span class="badge rounded-pill bg-danger">{{ $stepsCount[9] }}</span>
-                            </li>
-                            <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
-                                Published
-                                <span class="badge rounded-pill bg-success">{{ $stepsCount[12] }}</span>
-                            </li>
-                            <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
-                                Not Published
-                                <span class="badge rounded-pill bg-danger">{{ $stepsCount[11] }}</span>
-                            </li>
+                            <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ route('fixtures.index', ['step' => 10]) }}">
+                                <li class=" list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                    Template Validation OK
+                                    <span class="badge rounded-pill bg-success">{{ $stepsCount[10] }}</span>
+                                </li>
+                            </a>
+                            <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ route('fixtures.index', ['step' => 9]) }}">
+                                <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+                                    Template Validation Fail
+                                    <span class="badge rounded-pill bg-danger">{{ $stepsCount[9] }}</span>
+                                </li>
+                            </a>
+                            <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ route('fixtures.index', ['step' => 12]) }}">
+                                <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                    Published
+                                    <span class="badge rounded-pill bg-success">{{ $stepsCount[12] }}</span>
+                                </li>
+                            </a>
+                            <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ route('fixtures.index', ['step' => 11]) }}">
+                                <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+                                    Not Published
+                                    <span class="badge rounded-pill bg-danger">{{ $stepsCount[11] }}</span>
+                                </li>
+                            </a>
                         </ul>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <h2 class="h2">Fixtures</h2>
                     </div>
                     <div class="table-responsive small">
@@ -162,6 +185,9 @@
                             @endforeach
                             </tbody>
                         </table>
+                        @if(empty(Request::all()))
+                            {{ $fixtures->links() }}
+                        @endif
                     </div>
                 </div>
             </div>

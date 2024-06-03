@@ -75,32 +75,6 @@ class Fixtures extends Model
         return $fixture->save();
     }
 
-    /**
-     * @param int $leagueId
-     * @param int $seasonId
-     * @param string $round
-     * @return Collection
-     */
-    public function getAll(int $leagueId, int $seasonId, string $round): Collection
-    {
-        return Fixtures::all()
-            ->where('league_id', $leagueId)
-            ->where('season_id', $seasonId)
-            ->where('round', $round)
-            ->where('status', '=', self::STATUS_PENDING);
-    }
-
-    /**
-     * @param int $fixtureId
-     * @return Collection
-     */
-    public function getById(int $fixtureId): Collection
-    {
-        return Fixtures::all()
-            ->where('fixture_id', $fixtureId)
-            ->where('status', '=', self::STATUS_PENDING);
-    }
-
     public function league(): BelongsTo
     {
         return $this->belongsTo(Leagues::class);
