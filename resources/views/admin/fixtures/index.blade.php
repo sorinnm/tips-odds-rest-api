@@ -10,7 +10,7 @@
         <script>
             window.chartData = {{ json_encode([2421, 5894, 12343, 4229, 3588, 900, 4100]) }};
         </script>
-        <main class="col-md-9 ms-sm-auto col-lg-10 overflow-scroll">
+        <main class="col-md-9 ms-sm-auto col-lg-10 overflow-y-scroll">
             <div class="container-fluid">
 {{--                <nav class="navbar sticky-top navbar-expand-lg navbar-auto bg-light gy-2">--}}
 {{--                    <div class="container-fluid">--}}

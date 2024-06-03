@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ApiTestController;
 use App\Http\Controllers\Admin\CountriesController;
 use App\Http\Controllers\Admin\FixturesController;
 use App\Http\Controllers\Admin\LeaguesController;
+use App\Http\Controllers\Admin\SeasonsController;
 use App\Http\Controllers\Admin\SportsController;
 use App\Http\Controllers\FixtureController;
 use Carbon\Carbon;
@@ -60,6 +62,18 @@ Route::prefix('admin')->group(function () {
             Route::get('/', [FixturesController::class, 'index'])->name('fixtures.index');
             Route::get('/details/{id}', [FixturesController::class, 'details'])->name('fixtures.details');
             Route::post('/data-integrity-check', [FixturesController::class, 'ajaxDataIntegrity'])->name('ajax.admin.fixtures.dataIntegrityCheck');
+        });
+
+        Route::prefix('seasons')->group(function () {
+            Route::get('/', [SeasonsController::class, 'index'])->name('seasons.index');
+            Route::get('/add', [SeasonsController::class, 'add'])->name('seasons.add');
+            Route::post('/add', [SeasonsController::class, 'save'])->name('seasons.save');
+            Route::post('/delete', [SeasonsController::class, 'delete'])->name('seasons.delete');
+            Route::post('/status', [SeasonsController::class, 'status'])->name('seasons.status');
+        });
+
+        Route::prefix('api/test')->group(function () {
+            Route::get('/', [ApiTestController::class, 'index'])->name('api.test');
         });
 
         Route::get('/logs', [AdminController::class, 'logs']);

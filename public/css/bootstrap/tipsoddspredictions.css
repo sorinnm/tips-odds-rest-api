@@ -1,3 +1,15 @@
 .di_title {
     cursor: pointer;
 }
+
+@media (max-width: 1650px) {
+    .brand-title {
+        font-size: 1.25rem !important;
+    }
+}
+
+@media (max-width: 1450px) {
+    .brand-title {
+        font-size: 1rem !important;
+    }
+}
