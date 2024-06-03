@@ -78,6 +78,10 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/logs', [AdminController::class, 'logs']);
 
+        Route::prefix('settings')->group(function () {
+            Route::get('/', [AdminController::class, 'settings'])->name('settings.index');
+        });
+
         // admin user
         Route::prefix('user')->group(function () {
             Route::get('/logout', [AdminController::class, 'logout'])->name('admin.logout');

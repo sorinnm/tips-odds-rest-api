@@ -7,50 +7,51 @@
         <ul class="nav nav-pills flex-column mb-auto">
             <li>
                 <a href="{{ route('dashboard') }}" class="nav-link text-white">
-                    <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+                    <i class="bi bi-speedometer2"></i>
                     Dashboard
                 </a>
             </li>
             <li>
                 <a href="{{ url('/admin/fixtures') }}" class="nav-link text-white">
-                    <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
                     Fixtures
                 </a>
             </li>
             <li>
                 <a href="{{ route('sports.index') }}" class="nav-link text-white">
-                    <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
                     Sports
                 </a>
             </li>
             <li>
                 <a href="{{ route('countries.index') }}" class="nav-link text-white">
-                    <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
-                    Countries
+                    <span class="px-2">|_ Countries</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('leagues.index') }}" class="nav-link text-white">
-                    <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
-                    Leagues
+                    <span class="px-4">|_ Leagues</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('seasons.index') }}" class="nav-link text-white">
-                    <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
-                    Seasons
+                    <span class="px-5">|_ Seasons</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('api.test') }}" class="nav-link text-white">
-                    <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+                    <i class="bi bi-cloud-arrow-up"></i>
                     API Test
                 </a>
             </li>
             <li>
                 <a href="{{ url('/admin/logs') }}" class="nav-link text-white">
-                    <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+                    <i class="bi bi-file-earmark-bar-graph"></i>
                     Logs
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('settings.index') }}" class="nav-link text-white">
+                    <i class="bi bi-gear"></i>
+                    Settings
                 </a>
             </li>
         </ul>

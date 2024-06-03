@@ -92,10 +92,17 @@ class AdminController extends Controller
     {
         $user = $request->user();
 
-        $files = Storage::disk('local')->files(storage_path('logs'));
-        dd($files);
-
         return view('admin/logs', ['user' => $user, 'pageTitle' => 'Logs']);
+    }
+
+    public function settings(Request $request)
+    {
+        $user = $request->user();
+
+        return view('admin.settings.index', [
+            'user' => $user,
+            'pageTitle' => 'Settings'
+        ]);
     }
 
     /**
