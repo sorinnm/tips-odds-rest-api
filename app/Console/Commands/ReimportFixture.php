@@ -58,9 +58,8 @@ class ReimportFixture extends Command
             }
             $homeTeam = $fixtureData[0]['teams']['home']['name'];
             $awayTeam = $fixtureData[0]['teams']['away']['name'];
-            $league = Leagues::all()->firstWhere('api_football_id', $fixture->league_id);
-            $countryName = $league->country->name;
-            $leagueName = $league->name;
+            $countryName = $fixture->league->country->name;
+            $leagueName = $fixture->league->name;
 
             $data = $this->apiFootballService->reimportFixture($fixture);
 

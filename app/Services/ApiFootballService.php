@@ -255,8 +255,8 @@ class ApiFootballService
     public function reimportFixture(Fixtures $fixture): array
     {
         $fixtureId = $fixture->fixture_id;
-        $this->leagueId = $fixture->league_id;
-        $this->seasonId = $fixture->season_id;
+        $this->leagueId = $fixture->league->api_football_id;
+        $this->seasonId = $fixture->season->name;
 
         $fixtureData = json_decode($fixture->fixtures, true);
         if (empty($fixtureData)) {
