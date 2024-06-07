@@ -278,7 +278,7 @@ class ApiFootballService
 
         // Get fixtures and save
         $saved = false;
-        $fixtureMatch = $this->cleanData($this->getFixtureMatch($fixtureId), self::DATA_TYPE_FIXTURES);
+        $fixtureMatch = $this->getFixtureMatch($fixtureId);
         if (!empty($fixtureMatch)) {
             $saved = $this->fixtures->store([
                 'fixture_id' => $fixtureId,
