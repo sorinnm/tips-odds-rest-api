@@ -256,7 +256,7 @@ class ApiFootballService
     {
         $fixtureId = $fixture->fixture_id;
         $this->leagueId = $fixture->league->api_football_id;
-        $this->seasonId = $fixture->season->name;
+        $this->seasonId = $fixture->season_id;
 
         $fixtureData = json_decode($fixture->fixtures, true);
         if (empty($fixtureData)) {
