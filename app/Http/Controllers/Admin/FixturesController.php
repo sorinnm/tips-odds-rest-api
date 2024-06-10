@@ -23,7 +23,7 @@ class FixturesController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $fixtures = Fixtures::paginate(20);
+        $fixtures = Fixtures::orderBy('created_at', 'desc')->paginate(20);
 
         if ($request->query('step')) {
             $fixtures = $fixtures->whereIn('step', explode(',', $request->query('step')));
