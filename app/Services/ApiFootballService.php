@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Countries;
 use App\Models\Fixtures;
 use App\Models\Leagues;
+use App\Models\Rounds;
 use App\Models\Seasons;
 use App\Models\Standings;
 use Illuminate\Database\Eloquent\Casts\Json;
@@ -399,8 +400,16 @@ class ApiFootballService
 
         if (empty($apiFootballErrors)) {
             $reportData['API-Football'] = 'OK';
+            $this->fixtures->store([
+                'fixture_id' => $fixtureId,
+                'step' => 4
+            ]);
         } else {
             $reportData['API-Football'] = implode(',', $apiFootballErrors);
+            $this->fixtures->store([
+                'fixture_id' => $fixtureId,
+                'step' => count($apiFootballErrors) > 2 ? 2 : 3
+            ]);
         }
 
         return [
