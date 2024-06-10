@@ -68,6 +68,10 @@ class ImportFixtures extends Command
                                 $this->apiFootballService->leagueId,
                                 $this->apiFootballService->seasonId
                             );
+
+                            if (empty($data)) {
+                                throw new \Exception('No data returned from API-Football');
+                            }
                         } catch (\Throwable $exception) {
                             error("$countryName | $leagueName: " . $exception->getMessage());
                             continue;
