@@ -104,7 +104,7 @@ class GenerateFixtureText extends Command
      */
     protected function init(Fixtures $fixture): void
     {
-        $league = Leagues::all()->where('api_football_id', $fixture->league_id)->first();
+        $league = Leagues::all()->where('api_football_id', $fixture->league->api_football_id)->first();
         $this->countryName = $league->country->name;
         $this->leagueName = $league->name;
         $this->round = $fixture->round;

@@ -62,8 +62,8 @@ class ChatGPTService
 
         // Add to messages the JSON contents for ChatGPT processing
         $standings = $this->standings->retrieveStandings(
-            $fixture->league_id,
-            $fixture->season_id,
+            $fixture->league->api_football_id,
+            $fixture->league->season->name,
             $fixture->round
         );
 
