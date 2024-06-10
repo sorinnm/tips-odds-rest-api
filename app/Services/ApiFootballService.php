@@ -408,7 +408,7 @@ class ApiFootballService
             $reportData['API-Football'] = implode(',', $apiFootballErrors);
             $this->fixtures->store([
                 'fixture_id' => $fixtureId,
-                'step' => count($apiFootballErrors) > 2 ? 2 : 3
+                'step' => (count($apiFootballErrors) > 2) ? 2 : 3
             ]);
         }
 
