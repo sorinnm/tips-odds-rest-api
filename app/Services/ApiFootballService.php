@@ -242,8 +242,16 @@ class ApiFootballService
 
             if (empty($apiFootballErrors)) {
                 $reportData['API-Football'] = 'OK';
+                $this->fixtures->store([
+                    'fixture_id' => $fixtureId,
+                    'step' => 4
+                ]);
             } else {
                 $reportData['API-Football'] = implode(',', $apiFootballErrors);
+                $this->fixtures->store([
+                    'fixture_id' => $fixtureId,
+                    'step' => (count($apiFootballErrors) > 2) ? 2 : 3
+                ]);
             }
 
             $result['report'][] = $reportData;
