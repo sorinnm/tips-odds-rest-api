@@ -40,7 +40,7 @@ class ValidateGeneration
             'second_paragraph.top_3_predictions.*.reason' => 'required|string',
             'third_paragraph.title' => 'required|string',
             'third_paragraph.content' => 'required|string',
-            'third_paragraph.head_to_head' => 'required|array|size:5',
+            'third_paragraph.head_to_head' => 'required|array|size:1',
             'third_paragraph.head_to_head.*.match' => 'required|string',
             'forth_paragraph.title' => 'required|string',
             'forth_paragraph.content' => 'required|string',
