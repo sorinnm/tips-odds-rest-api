@@ -28,6 +28,11 @@ class Status extends Component
         Artisan::call('top:chatgpt:generate ' . $this->fixture->fixture_id);
     }
 
+    public function dataIntegrityCheckAck()
+    {
+        FixtureStatusUpdate::dispatchIf($this->fixture->step == 3, $this->fixture, 4);
+    }
+
     public function generationContentCheck()
     {
         GenerationCheck::dispatch($this->fixture);
