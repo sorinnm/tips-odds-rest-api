@@ -30,7 +30,7 @@ class Status extends Component
 
     public function dataIntegrityCheckAck()
     {
-        FixtureStatusUpdate::dispatchIf($this->fixture->step == 3, $this->fixture, 4);
+        FixtureStatusUpdate::dispatchIf($this->fixture->step == 3, $this->fixture, 'DataIntegrityCheck', 4);
     }
 
     public function generationContentCheck()
