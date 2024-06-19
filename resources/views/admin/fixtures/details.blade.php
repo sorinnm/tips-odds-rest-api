@@ -34,7 +34,29 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-3">
+                        <ul class="list-group list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">API Football ID</div>
+                                    {{ $fixture->fixture_id }}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Imported At</div>
+                                    {{ date('F j Y, H:i:s', strtotime($fixture->created_at)) }}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Last Update</div>
+                                    {{ date('F j Y, H:i:s', strtotime($fixture->updated_at)) }}
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-3">
                         <livewire:data-integrity-check :fixture="$fixture" />
                     </div>
                     <div class="col-6">
@@ -76,6 +98,23 @@
             },
             url: '{{ route('ajax.admin.fixtures.dataIntegrityCheck') }}',
             data: {'id': {{ $fixture->id }}, 'type': type},
+            success : function(data){
+                $('.modal-body textarea').text(JSON.stringify(data, null, "\t"));
+            }
+        });
+        $('.modal-title').text(title);
+    });
+
+    $(document).on('click','.chatGptGeneration',function(){
+        var type = $(this).attr('data-type');
+        var title = $(this).find('.status-title').text();
+        $.ajax({
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '{{ route('ajax.admin.fixtures.chatGptCheck') }}',
+            data: {'fixture_id': {{ $fixture->fixture_id }}, 'type': type},
             success : function(data){
                 $('.modal-body textarea').text(JSON.stringify(data, null, "\t"));
             }

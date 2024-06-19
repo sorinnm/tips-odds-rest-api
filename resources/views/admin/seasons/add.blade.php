@@ -25,7 +25,6 @@
                                 <label for="floatingInput">Name</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <label class="col-lg-2 control-label">League</label>
                                 <select name="leagueId"
                                         class="form-control selectpicker @error('leagueId') is-invalid @enderror"
                                         data-container="body"
@@ -35,12 +34,15 @@
                                         data-style=""
                                         data-style-base="form-control"
                                         data-size="10"
-                                        aria-describedby="validationServerLeagueIdFeedback">
+                                        aria-describedby="validationServerLeagueIdFeedback"
+                                        id="leagueId"
+                                        placeholder="">
                                     <option value="0">Please select a league...</option>
                                     @foreach($leagues as $league)
-                                        <option value="{{ $league->id }}" {{ old('leagueId') == $league->id ? "selected" : '' }}>{{ $league->name }}</option>
+                                        <option value="{{ $league->id }}" {{ old('leagueId') == $league->id ? "selected" : '' }}>{{ $league->country->name }} | {{ $league->name }}</option>
                                     @endforeach
                                 </select>
+                                <label for="leagueId">League</label>
                                 <div id="validationServerLeagueIdFeedback" class="invalid-feedback">
                                     Please select a value.
                                 </div>

@@ -2,11 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property mixed $fixture_id
+ * @property mixed $league
+ * @property mixed $season_id
+ * @property mixed $fixtures
+ * @property mixed $home_team_id
+ * @property mixed $away_team_id
+ */
 class Fixtures extends Model
 {
     use HasFactory;
@@ -34,8 +41,6 @@ class Fixtures extends Model
 
     const STATUS_COMPLETE = 'complete';
     const STATUS_PENDING = 'pending';
-    const STATUS_RUNNING = 'running';
-    const STATUS_RETRY = 'retry';
     const STATUS_ERROR = 'error';
 
     // steps

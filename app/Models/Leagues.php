@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @property mixed $api_football_id
+ * @property mixed $name
+ * @property mixed $country_id
+ * @property mixed $category_id
+ * @property mixed $category_path
+ * @property mixed $page_id
+ */
 class Leagues extends Model
 {
     use HasFactory;

@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Events\FixtureStatusUpdate;
+use App\Events\GenerationCheck;
 use App\Models\Countries;
 use App\Models\Fixtures;
 use App\Models\Leagues;
@@ -73,6 +75,7 @@ class GenerateFixtureText extends Command
                     $tableData = [];
                     foreach ($fixtures as $fixture) {
                         $this->init($fixture);
+                        $fixtureId = $fixture->fixture_id;
                         $tableData[] = $this->processFixture($fixture);
                     }
 
@@ -151,7 +154,7 @@ class GenerateFixtureText extends Command
         if (!empty($generatedData)) {
             $saved = $this->textGenerator->store([
                     'fixture_id' => $fixture->fixture_id,
-                    'generation' => $generatedData,
+                    'generation' => trim($generatedData, "```json\n"),
                 ]
             );
         }
@@ -162,9 +165,13 @@ class GenerateFixtureText extends Command
                 'status'     => 'complete'
             ]);
             $result['ChatGPT'] = 'OK';
+            $step = 6;
         } else {
             $result['ChatGPT'] = 'ERROR';
+            $step = 5;
         }
+
+        FixtureStatusUpdate::dispatch($fixture, $step);
 
         return $result;
     }

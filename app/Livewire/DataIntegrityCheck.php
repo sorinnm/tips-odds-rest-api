@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Events\FixtureStatusUpdate;
 use App\Models\Fixtures;
 use App\Services\ApiFootballService;
 use Illuminate\Support\Facades\Artisan;
@@ -18,6 +19,7 @@ class DataIntegrityCheck extends Component
     public function reimportAll()
     {
         Artisan::call('top:reimport-fixture ' . $this->fixture->fixture_id);
+        $this->dispatch('refresh-statuses');
     }
 
     public function render()

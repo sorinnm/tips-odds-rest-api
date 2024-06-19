@@ -5,9 +5,20 @@
     </div>
     <div class="card-body bg-{{ $fixture->step == 2 ? 'danger' : ($fixture->step == 3 ? 'warning' : ($fixture->step >= 4 ? 'success' : 'secondary')) }} d-flex justify-content-between align-items-center">
         <h5 class="card-title"><span class="badge rounded-pill bg-dark">2</span> Data Integrity Check</h5>
+        @if($fixture->step == 3)
+            <form wire:submit="dataIntegrityCheckAck">
+                <input id="dicFixtureId" type="hidden" wire:model="fixture" value="">
+                <button wire:loading.remove type="submit" class="btn btn-info">OK</button>
+                <div wire:loading>
+                    <div class="spinner-border text-info" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </form>
+        @endif
     </div>
-    <div class="card-body bg-{{ $fixture->step == 5 ? 'danger' : ($fixture->step == 6 ? 'success' : 'secondary') }} d-flex justify-content-between align-items-center">
-        <h5 class="card-title"><span class="badge rounded-pill bg-dark">3</span> ChatGPT generation</h5>
+    <div data-bs-toggle="modal" data-bs-target=".jsonContentModal" data-type="chat_gpt_generation" class="card-body chatGptGeneration bg-{{ $fixture->step == 5 ? 'danger' : ($fixture->step >= 6 ? 'success' : 'secondary') }} d-flex justify-content-between align-items-center">
+        <h5 class="card-title"><span class="badge rounded-pill bg-dark">3</span> <span class="status-title">ChatGPT generation</span></h5>
         @if($fixture->step == 4)
             <form wire:submit="generate">
                 <input id="generationFixtureId" type="hidden" wire:model="fixture" value="">
@@ -32,8 +43,26 @@
     </div>
     <div class="card-body bg-{{ $fixture->step == 7 ? 'danger' : ($fixture->step == 8 ? 'success' : 'secondary') }} d-flex justify-content-between align-items-center">
         <h5 class="card-title"><span class="badge rounded-pill bg-dark">4</span> Generation content check</h5>
-        @if($fixture->step == 7)
-            <a href="#" class="btn btn-secondary">Retry</a>
+        @if($fixture->step == 6)
+            <form wire:submit="generationContentCheck">
+                <input id="generationContentCheck" type="hidden" wire:model="fixture" value="">
+                <button wire:loading.remove type="submit" class="btn btn-info">Check</button>
+                <div wire:loading>
+                    <div class="spinner-border text-info" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </form>
+        @elseif($fixture->step == 7)
+            <form wire:submit="generationContentRetry">
+                <input id="generationContentRetry" type="hidden" wire:model="fixture" value="">
+                <button wire:loading.remove type="submit" class="btn btn-info">Retry</button>
+                <div wire:loading>
+                    <div class="spinner-border text-info" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                </div>
+            </form>
         @endif
     </div>
     <div class="card-body bg-{{ $fixture->step == 9 ? 'danger' : ($fixture->step == 10 ? 'success' : 'secondary') }} d-flex justify-content-between align-items-center">

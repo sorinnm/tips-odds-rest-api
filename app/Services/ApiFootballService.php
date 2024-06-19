@@ -2,16 +2,17 @@
 
 namespace App\Services;
 
+use App\Events\DataIntegrityCheck;
 use App\Models\Countries;
 use App\Models\Fixtures;
 use App\Models\Leagues;
-use App\Models\Rounds;
 use App\Models\Seasons;
 use App\Models\Standings;
-use Illuminate\Database\Eloquent\Casts\Json;
+use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 class ApiFootballService
 {
@@ -48,36 +49,43 @@ class ApiFootballService
     /**
      *  Initialize constant variables
      *
-     * @param $leagueId
-     * @param $seasonId
+     * @param int $leagueId
+     * @param int $seasonId
+     * @param string|null $roundId
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
-    public function init($leagueId, $seasonId): void
+    public function init(int $leagueId, int $seasonId, ?string $roundId): void
     {
         $this->leagueId = $leagueId;
         $this->seasonId = $seasonId;
-        $currentRound = $this->getCurrentRound($leagueId, $seasonId);
 
-        if (empty($currentRound)) {
-            throw new \Exception('Round not found');
+        if (empty($roundId)) {
+            $currentRound = $this->getCurrentRound($leagueId, $seasonId);
+
+            if (empty($currentRound)) {
+                throw new Exception('Round not found');
+            }
+            $this->round = $this->getCurrentRound($leagueId, $seasonId)[0];
+        } else {
+            $this->round = $roundId;
         }
-//        $this->round = $this->getCurrentRound($leagueId, $seasonId)[0];
-        $this->round = 'Group E - 1';
+
     }
 
     /**
-     *  Main function to store fixtures data
+     *   Main function to store fixtures data
      *
      * @param int $leagueId
      * @param int $seasonId
+     * @param string|null $roundId
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
-    public function importFixtures(int $leagueId, int $seasonId): array
+    public function importFixtures(int $leagueId, int $seasonId, ?string $roundId = null): array
     {
         $result = [];
-        $this->init($leagueId, $seasonId);
+        $this->init($leagueId, $seasonId, $roundId);
 
         $fixturesLeague = (array) $this->getFixtureLeague();
 
@@ -243,17 +251,12 @@ class ApiFootballService
 
             if (empty($apiFootballErrors)) {
                 $reportData['API-Football'] = 'OK';
-                $this->fixtures->store([
-                    'fixture_id' => $fixtureId,
-                    'step' => 4
-                ]);
             } else {
                 $reportData['API-Football'] = implode(',', $apiFootballErrors);
-                $this->fixtures->store([
-                    'fixture_id' => $fixtureId,
-                    'step' => (count($apiFootballErrors) > 2) ? 2 : 3
-                ]);
             }
+
+            $fixture = Fixtures::all()->where('fixture_id', $fixtureId)->first();
+            DataIntegrityCheck::dispatch($fixture, $apiFootballErrors);
 
             $result['report'][] = $reportData;
             $result['fixture'][] = $fixtureData;
@@ -262,6 +265,9 @@ class ApiFootballService
         return $result;
     }
 
+    /**
+     * @throws Exception
+     */
     public function reimportFixture(Fixtures $fixture): array
     {
         $fixtureId = $fixture->fixture_id;
@@ -270,7 +276,7 @@ class ApiFootballService
 
         $fixtureData = json_decode($fixture->fixtures, true);
         if (empty($fixtureData)) {
-            throw new \Exception(' missing fixtures data');
+            throw new Exception(' missing fixtures data');
         }
 
         $homeTeam = $fixtureData[0]['teams']['home']['name'];
@@ -409,17 +415,11 @@ class ApiFootballService
 
         if (empty($apiFootballErrors)) {
             $reportData['API-Football'] = 'OK';
-            $this->fixtures->store([
-                'fixture_id' => $fixtureId,
-                'step' => 4
-            ]);
         } else {
             $reportData['API-Football'] = implode(',', $apiFootballErrors);
-            $this->fixtures->store([
-                'fixture_id' => $fixtureId,
-                'step' => (count($apiFootballErrors) > 2) ? 2 : 3
-            ]);
         }
+
+        DataIntegrityCheck::dispatch($fixture, $apiFootballErrors);
 
         return [
             'report' => $reportData,
@@ -445,9 +445,9 @@ class ApiFootballService
 
     /**
      * @param int $fixtureId
-     * @return mixed|void
+     * @return array
      */
-    public function getFixtureMatch(int $fixtureId)
+    public function getFixtureMatch(int $fixtureId): array
     {
         $response = $this->callAPI(
             Request::METHOD_GET,
@@ -616,10 +616,9 @@ class ApiFootballService
     }
 
     /**
-     * Recursive function to remove specific keys from an array
-     *
      * @param array $array
      * @param array $keysToRemove
+     * @param array $keysToSkip
      * @return array
      */
     private function removeKeys(array $array, array $keysToRemove, array $keysToSkip = []): array
@@ -664,7 +663,7 @@ class ApiFootballService
             }
 
             return $result;
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             Log::channel('api-football')->error(__CLASS__ . ' >>> ' . $th->getMessage());
         }
     }

@@ -144,9 +144,22 @@
                 </div>
 
                 <div class="row">
-                    <div class="d-flex flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <div class="d-flex flex-wrap justify-content-between flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <h2 class="h2">Fixtures</h2>
+                        <a href="{{ route('fixtures.import.index') }}">
+                            <button type="button" class="btn btn-primary text-end"><i class="bi bi-arrow-down"></i> Manual import</button>
+                        </a>
                     </div>
+                    @if (Session::has('messages'))
+                        @php
+                            $messages = Session::get('messages');
+                        @endphp
+                        @foreach($messages as $message)
+                            <div class="alert alert-info">{{ $message }}</div>
+                        @endforeach
+                    @elseif(Session::has('error_message'))
+                        <div class="alert alert-danger">{{ Session::get('error_message') }}</div>
+                    @endif
                     <div class="table-responsive small">
                         <table class="table table-striped table-sm align-middle">
                             <thead>

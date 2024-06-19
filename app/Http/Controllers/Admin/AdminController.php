@@ -31,7 +31,8 @@ class AdminController extends Controller
             return redirect()->route('dashboard');
         }
 
-        return view('admin/login');
+        return view('admin/login')
+            ->with('pageTitle', 'TipsOddsPredictions Admin Dashboard');
     }
 
     /**
