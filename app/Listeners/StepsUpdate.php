@@ -24,6 +24,7 @@ class StepsUpdate
     public function handle(FixtureStatusUpdate $event): void
     {
         $fixture = $event->fixture;
+        $type = $event->type;
         $nextStep = $event->step;
 
         $previousStep = $fixture->step;
@@ -33,7 +34,7 @@ class StepsUpdate
         $fixture->save();
 
         if ($previousStep != $nextStep) {
-            Log::channel('api-football')->info("DataIntegrityCheck: #{$fixture->fixture_id} updated from step '$steps[$previousStep] => $steps[$nextStep]'");
+            Log::channel('api-football')->info("$type: #{$fixture->fixture_id} updated from step '$steps[$previousStep] => $steps[$nextStep]'");
         }
     }
 }

@@ -4,7 +4,9 @@ namespace App\Livewire;
 
 use App\Events\FixtureStatusUpdate;
 use App\Events\GenerationCheck;
+use App\Events\TemplateValidation;
 use App\Models\Fixtures;
+use Illuminate\Support\Facades\Artisan;
 use Livewire\Component;
 use Livewire\Attributes\On;
 
@@ -14,33 +16,41 @@ class Status extends Component
 
     public function generate()
     {
-        sleep(5);
-        $this->fixture->step = 5;
-        $this->fixture->save();
+        Artisan::call('top:chatgpt:generate ' . $this->fixture->fixture_id);
     }
 
-    public function dataIntegrityCheckAck()
+    public function regenerate()
     {
-        FixtureStatusUpdate::dispatchIf($this->fixture->step == 3, $this->fixture, 4);
+        if ($this->fixture->status == Fixtures::STATUS_COMPLETE) {
+            $this->fixture->status = Fixtures::STATUS_PENDING;
+            $this->fixture->save();
+        }
+        Artisan::call('top:chatgpt:generate ' . $this->fixture->fixture_id);
     }
 
     public function generationContentCheck()
     {
         GenerationCheck::dispatch($this->fixture);
-        FixtureStatusUpdate::dispatchIf($this->fixture->step == 6, $this->fixture, 7);
     }
 
     public function generationContentRetry()
     {
-        FixtureStatusUpdate::dispatchIf($this->fixture->step == 7, $this->fixture, 8);
+        GenerationCheck::dispatch($this->fixture);
     }
 
-    public function retry()
+    public function templateValidationCheck()
+    {
+        TemplateValidation::dispatch($this->fixture);
+    }
+
+    public function templateValidationRetry()
+    {
+        TemplateValidation::dispatch($this->fixture);
+    }
+
+    public function fixturePublish()
     {
         sleep(5);
-        $this->fixture->step = 6;
-        $this->fixture->save();
-
     }
 
     #[On('refresh-statuses')]

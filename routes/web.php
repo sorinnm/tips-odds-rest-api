@@ -64,7 +64,7 @@ Route::prefix('admin')->group(function () {
             Route::get('/import', [FixturesController::class, 'manualImportIndex'])->name('fixtures.import.index');
             Route::post('/import', [FixturesController::class, 'manualImport'])->name('fixtures.import');
             Route::post('/ajax-data-integrity-check', [FixturesController::class, 'ajaxDataIntegrity'])->name('ajax.admin.fixtures.dataIntegrityCheck');
-            Route::post('/ajax-chat-gpt-check', [FixturesController::class, 'ajaxChatGPT'])->name('ajax.admin.fixtures.chatGptCheck');
+            Route::post('/ajax-validation-check', [FixturesController::class, 'ajaxValidation'])->name('ajax.admin.fixtures.validationCheck');
             Route::post('/ajax-refresh-select-options', [FixturesController::class, 'ajaxRefreshOptions'])->name('ajax.admin.fixtures.refreshSelectOptions');
             Route::post('/ajax-get-current-round', [FixturesController::class, 'ajaxGetCurrentRound'])->name('ajax.admin.fixtures.getCurrentRound');
         });

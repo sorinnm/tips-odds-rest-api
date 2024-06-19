@@ -242,18 +242,26 @@ class FixturesController extends Controller
         return response()->json(json_decode($fixture->$type, true), 200);
     }
 
-    public function ajaxChatGPT(Request $request): \Illuminate\Http\JsonResponse
+    public function ajaxValidation(Request $request): \Illuminate\Http\JsonResponse
     {
         switch ($type = $request->get('type')) {
             case 'chat_gpt_generation':
                 $generation = TextGenerator::all()
                     ->where('fixture_id', $request->get('fixture_id'))
                     ->first();
-
-
                 $jsonArray = trim($generation->generation, "```json\n");
                 break;
             case 'generation_content_check':
+                $fixture = Fixtures::all()
+                    ->where('fixture_id', $request->get('fixture_id'))
+                    ->first();
+                $jsonArray = $fixture->step_error_message;
+                break;
+            case 'template_validation_check':
+                $fixture = Fixtures::all()
+                    ->where('fixture_id', $request->get('fixture_id'))
+                    ->first();
+                $jsonArray = json_encode($fixture->step_error_message);
                 break;
             default:
                 $jsonArray = [];

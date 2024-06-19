@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $fixtures
  * @property mixed $home_team_id
  * @property mixed $away_team_id
+ * @property false|mixed|string $step_error_message
  */
 class Fixtures extends Model
 {

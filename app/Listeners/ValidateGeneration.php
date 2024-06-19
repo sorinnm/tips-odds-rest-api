@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\FixtureStatusUpdate;
 use App\Events\GenerationCheck;
 use App\Models\TextGenerator;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -51,12 +52,12 @@ class ValidateGeneration
         if ($validator->fails()) {
             // Validation failed
             $errors = $validator->errors();
-            $a = 'a';
-            $event->fixture->step = 7;
+            $event->fixture->step_error_message = json_encode($errors, JSON_PRETTY_PRINT);
+            $event->fixture->save();
+            FixtureStatusUpdate::dispatch($event->fixture, 'GenerationContentCheck', 7);
         } else {
             // Validation passed
-            $a = 'b';
-            $event->fixture->step = 8;
+            FixtureStatusUpdate::dispatch($event->fixture, 'GenerationContentCheck', 8);
         }
     }
 }

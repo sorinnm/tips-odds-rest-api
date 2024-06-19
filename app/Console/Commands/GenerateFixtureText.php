@@ -171,7 +171,7 @@ class GenerateFixtureText extends Command
             $step = 5;
         }
 
-        FixtureStatusUpdate::dispatch($fixture, $step);
+        FixtureStatusUpdate::dispatch($fixture, 'GenerationContentCheck', $step);
 
         return $result;
     }
