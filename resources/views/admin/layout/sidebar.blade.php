@@ -62,7 +62,7 @@
                     <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
                     <strong>{{ $user->name }}</strong>
                 </a>
-                <span class="fs-6 text-secondary">v0.0.1</span>
+                <span class="fs-6 text-secondary">v0.1.0</span>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow" style="">
                     <li><a class="dropdown-item" href="#">Settings</a></li>
                     <li><a class="dropdown-item" href="#">Profile</a></li>
