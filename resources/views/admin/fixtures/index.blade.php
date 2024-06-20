@@ -198,7 +198,9 @@
                             @endforeach
                             </tbody>
                         </table>
-                        @if(empty(Request::all()))
+                        @if(!empty(Request::get('step')))
+                            {{ $fixtures->appends(['step' => Request::get('step')])->links() }}
+                        @else
                             {{ $fixtures->links() }}
                         @endif
                     </div>

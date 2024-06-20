@@ -26,14 +26,15 @@ class FixturesController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $fixtures = Fixtures::orderBy('created_at', 'desc')->paginate(20);
+        $fixtures = Fixtures::query()->orderBy('created_at', 'desc');
+
 
         if ($request->query('step')) {
-            $fixtures = $fixtures->whereIn('step', explode(',', $request->query('step')));
+            $fixtures->where('step', '=', $request->query('step'));
         }
 
         if ($request->query('league')) {
-            $fixtures = Fixtures::whereHas('league', function (Builder $query) use ($request) {
+            $fixtures->whereHas('league', function (Builder $query) use ($request) {
                 $query->where('name', 'like', $request->query('league'));
             });
         }
@@ -56,7 +57,7 @@ class FixturesController extends Controller
         return view('admin.fixtures.index', [
             'user' => $user,
             'pageTitle' => 'Fixtures',
-            'fixtures' => $fixtures,
+            'fixtures' => $fixtures->paginate(20),
             'stepsCount' => $stepsCount
         ]);
     }
