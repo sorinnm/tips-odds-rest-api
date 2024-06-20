@@ -6,7 +6,6 @@ use App\Events\FixturePublish;
 use App\Events\FixtureStatusUpdate;
 use App\Services\WordpressService;
 use Exception;
-use Illuminate\Support\Facades\Session;
 
 class PublishFixture
 {
@@ -25,11 +24,11 @@ class PublishFixture
         $fixture = $event->fixture;
 
         try {
-            $result = $this->wordpressService->processGeneration($fixture);
-            Session::flash('message', "Successfully published fixture ID #{$result['report']['ID']} - {$result['report']['Match']}!");
+            $this->wordpressService->processGeneration($fixture);
         } catch (Exception $e) {
             FixtureStatusUpdate::dispatch($fixture, 'FixturePublished', 11);
             $fixture->step_error_message = $e->getMessage();
+            $fixture->save();
         }
     }
 }

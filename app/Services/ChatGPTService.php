@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\FixtureStatusUpdate;
 use App\Models\Fixtures;
 use App\Models\Standings;
 use App\Models\TextGenerator;
@@ -25,6 +26,44 @@ class ChatGPTService
     ){}
 
     const TEXT_GENERATION_ENDPOINT = '/v1/chat/completions';
+
+    /**
+     * @param Fixtures $fixture
+     * @return array
+     * @throws \Exception
+     */
+    public function generateFixtureData(Fixtures $fixture): array
+    {
+        $saved = false;
+        $generatedData = $this->generateText($fixture);
+        $result['Updated At'] = date('Y-m-d H:i:s');
+        $result['ID'] = $fixture->fixture_id;
+
+        // save generated text from ChatGPT into DB
+        if (!empty($generatedData)) {
+            $saved = $this->generatorModel->store([
+                    'fixture_id' => $fixture->fixture_id,
+                    'generation' => trim($generatedData, "```json\n"),
+                ]
+            );
+        }
+
+        if ($saved) {
+            $this->fixtures->store([
+                'fixture_id' => $fixture->fixture_id,
+                'status'     => TextGenerator::STATUS_COMPLETE
+            ]);
+            $result['ChatGPT'] = 'OK';
+            $step = 6;
+        } else {
+            $result['ChatGPT'] = 'ERROR';
+            $step = 5;
+        }
+
+        FixtureStatusUpdate::dispatch($fixture, 'ChatGPTGenerationContent', $step);
+
+        return $result;
+    }
 
     /**
      * @param Fixtures $fixture

@@ -132,48 +132,10 @@ class GenerateFixtureText extends Command
             throw new \Exception(' is not pending generation >>> Status: ' . $fixture->status);
         }
 
-        $generatedData = $this->generateFixtureData($fixture);
+        $generatedData = $this->chatGPTService->generateFixtureData($fixture);
         $generatedData['Match'] = "$this->homeTeam - $this->awayTeam";
 
         return $generatedData;
-    }
-
-    /**
-     * @param Fixtures $fixture
-     * @return array
-     * @throws \Exception
-     */
-    public function generateFixtureData(Fixtures $fixture): array
-    {
-        $saved = false;
-        $generatedData = $this->chatGPTService->generateText($fixture);
-        $result['Updated At'] = date('Y-m-d H:i:s');
-        $result['ID'] = $fixture->fixture_id;
-
-        // save generated text from ChatGPT into DB
-        if (!empty($generatedData)) {
-            $saved = $this->textGenerator->store([
-                    'fixture_id' => $fixture->fixture_id,
-                    'generation' => trim($generatedData, "```json\n"),
-                ]
-            );
-        }
-
-        if ($saved) {
-            $this->fixtures->store([
-                'fixture_id' => $fixture->fixture_id,
-                'status'     => 'complete'
-            ]);
-            $result['ChatGPT'] = 'OK';
-            $step = 6;
-        } else {
-            $result['ChatGPT'] = 'ERROR';
-            $step = 5;
-        }
-
-        FixtureStatusUpdate::dispatch($fixture, 'GenerationContentCheck', $step);
-
-        return $result;
     }
 
     /**

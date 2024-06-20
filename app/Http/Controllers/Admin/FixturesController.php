@@ -244,12 +244,12 @@ class FixturesController extends Controller
 
     public function ajaxValidation(Request $request): \Illuminate\Http\JsonResponse
     {
-        switch ($type = $request->get('type')) {
+        switch ($request->get('type')) {
             case 'chat_gpt_generation':
                 $generation = TextGenerator::all()
                     ->where('fixture_id', $request->get('fixture_id'))
                     ->first();
-                $jsonArray = trim($generation->generation, "```json\n");
+                $jsonArray = $generation->generation;
                 break;
             case 'generation_content_check':
                 $fixture = Fixtures::all()
@@ -257,7 +257,7 @@ class FixturesController extends Controller
                     ->first();
                 $jsonArray = $fixture->step_error_message;
                 break;
-            case 'template_validation_check':
+            case 'template_validation_check'||'fixture_publish':
                 $fixture = Fixtures::all()
                     ->where('fixture_id', $request->get('fixture_id'))
                     ->first();

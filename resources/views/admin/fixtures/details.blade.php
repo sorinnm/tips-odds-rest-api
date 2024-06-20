@@ -120,6 +120,7 @@
                 url: '{{ route('ajax.admin.fixtures.validationCheck') }}',
                 data: {'fixture_id': {{ $fixture->fixture_id }}, 'type': type},
                 success : function(data){
+                    console.log(data);
                     $('.modal-body textarea').text(JSON.stringify(data, null, "\t"));
                 }
             });
@@ -157,6 +158,30 @@
         var step = $(this).attr('data-step');
 
         if (step == 9) {
+            $(this).attr('data-bs-toggle', 'modal');
+            var type = $(this).attr('data-type');
+            var title = $(this).find('.status-title').text();
+            $.ajax({
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{ route('ajax.admin.fixtures.validationCheck') }}',
+                data: {'fixture_id': {{ $fixture->fixture_id }}, 'type': type},
+                success : function(data){
+                    $('.modal-body textarea').text(JSON.stringify(data, null, "\t"));
+                }
+            });
+            $('.modal-title').text(title);
+        } else {
+            $(this).removeAttr('data-bs-toggle');
+        }
+    });
+
+    $(document).on('click','.fixturePublish',function(){
+        var step = $(this).attr('data-step');
+
+        if (step == 11) {
             $(this).attr('data-bs-toggle', 'modal');
             var type = $(this).attr('data-type');
             var title = $(this).find('.status-title').text();

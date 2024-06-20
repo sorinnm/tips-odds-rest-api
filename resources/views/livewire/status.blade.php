@@ -29,7 +29,7 @@
                     </div>
                 </div>
             </form>
-        @elseif($fixture->step == 6 || $fixture->step == 7)
+        @elseif(in_array($fixture->step, [6,7,9]))
                 <form wire:submit="regenerate">
                     <input id="generationFixtureId" type="hidden" wire:model="fixture" value="">
                     <button wire:loading.remove type="submit" class="btn btn-info">Regenerate</button>
@@ -99,8 +99,8 @@
             </form>
         @endif
     </div>
-    <div class="card-body bg-{{ $fixture->step == 11 ? 'danger' : ($fixture->step == 12 ? 'success' : 'secondary') }} d-flex justify-content-between align-items-center">
-        <h5 class="card-title"><span class="badge rounded-pill bg-dark">6</span> Fixture published</h5>
+    <div data-bs-target=".jsonContentModal" data-type="fixture_publish" data-step="{{ $fixture->step }}" class="card-body fixturePublish bg-{{ $fixture->step == 11 ? 'danger' : ($fixture->step == 12 ? 'success' : 'secondary') }} d-flex justify-content-between align-items-center">
+        <h5 class="card-title"><span class="badge rounded-pill bg-dark">6</span> <span class="status-title">Fixture published</span></h5>
         @if($fixture->step == 10)
             <form wire:submit="fixturePublish">
                 <input id="fixturePublish" type="hidden" wire:model="fixture" value="">

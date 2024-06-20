@@ -39,7 +39,7 @@ class ValidateGeneration
             'second_paragraph.top_3_predictions.*.prediction' => 'required|string',
             'second_paragraph.top_3_predictions.*.reason' => 'required|string',
             'third_paragraph.title' => 'required|string',
-            'third_paragraph.content' => 'required|string',
+            'third_paragraph.content' => 'string',
             'third_paragraph.head_to_head' => 'required|array|between:1,5',
             'third_paragraph.head_to_head.*.match' => 'required|string',
             'forth_paragraph.title' => 'required|string',
@@ -47,6 +47,10 @@ class ValidateGeneration
         ];
 
         // Validate the request data against the rules
+        $jsonArray = json_decode($content, true);
+        if (json_last_error() == JSON_ERROR_CTRL_CHAR) {
+            $content = str_replace("\n", "", $content);
+        }
         $validator = Validator::make(json_decode($content, true), $rules);
 
         if ($validator->fails()) {

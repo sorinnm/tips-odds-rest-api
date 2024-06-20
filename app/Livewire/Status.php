@@ -2,12 +2,14 @@
 
 namespace App\Livewire;
 
+use App\Events\FixtureGeneration;
 use App\Events\FixturePublish;
 use App\Events\FixtureStatusUpdate;
 use App\Events\GenerationCheck;
 use App\Events\TemplateValidation;
 use App\Listeners\PublishFixture;
 use App\Models\Fixtures;
+use App\Models\TextGenerator;
 use Illuminate\Support\Facades\Artisan;
 use Livewire\Component;
 use Livewire\Attributes\On;
@@ -18,7 +20,7 @@ class Status extends Component
 
     public function generate()
     {
-        Artisan::call('top:chatgpt:generate ' . $this->fixture->fixture_id);
+        FixtureGeneration::dispatch($this->fixture);
     }
 
     public function regenerate()
@@ -27,12 +29,18 @@ class Status extends Component
             $this->fixture->status = Fixtures::STATUS_PENDING;
             $this->fixture->save();
         }
-        Artisan::call('top:chatgpt:generate ' . $this->fixture->fixture_id);
+
+        FixtureGeneration::dispatch($this->fixture);
     }
 
     public function dataIntegrityCheckAck()
     {
-        FixtureStatusUpdate::dispatchIf($this->fixture->step == 3, $this->fixture, 'DataIntegrityCheck', 4);
+        if ($this->fixture->generation && $this->fixture->generation->status == TextGenerator::STATUS_COMPLETE) {
+            FixtureStatusUpdate::dispatch($this->fixture, 'DataIntegrityCheck', 6);
+        } else {
+            FixtureStatusUpdate::dispatchIf($this->fixture->step == 3, $this->fixture, 'DataIntegrityCheck', 4);
+        }
+
     }
 
     public function generationContentCheck()
