@@ -23,17 +23,17 @@
             </li>
             <li>
                 <a href="{{ route('countries.index') }}" class="nav-link text-white">
-                    <span class="px-2">|_ Countries</span>
+                    <span> - Countries</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('leagues.index') }}" class="nav-link text-white">
-                    <span class="px-4">|_ Leagues</span>
+                    <span> -- Leagues</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('seasons.index') }}" class="nav-link text-white">
-                    <span class="px-5">|_ Seasons</span>
+                    <span> --- Seasons</span>
                 </a>
             </li>
             <li>

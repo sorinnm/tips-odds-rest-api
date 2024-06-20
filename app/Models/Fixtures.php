@@ -14,6 +14,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $home_team_id
  * @property mixed $away_team_id
  * @property false|mixed|string $step_error_message
+ * @property mixed $league_id
+ * @property mixed $home_logo
+ * @property mixed $away_logo
  */
 class Fixtures extends Model
 {
@@ -79,6 +82,14 @@ class Fixtures extends Model
         }
 
         return $fixture->save();
+    }
+
+    /**
+     * Get the generation associated with the fixture.
+     */
+    public function generation(): BelongsTo
+    {
+        return $this->belongsTo(TextGenerator::class, 'fixture_id', 'fixture_id');
     }
 
     public function league(): BelongsTo

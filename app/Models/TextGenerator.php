@@ -4,15 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TextGenerator extends Model
 {
     use HasFactory;
 
     protected $table = 'generations';
-    protected $fillable = ['fixture_id', 'generation', 'status', 'created_at', 'updated_at'];
+    protected $fillable = ['fixture_id', 'generation', 'post_id', 'page_id', 'url', 'status', 'created_at', 'updated_at'];
 
     const STATUS_COMPLETE = 'complete';
     const STATUS_PENDING = 'pending';

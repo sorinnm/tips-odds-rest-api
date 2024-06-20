@@ -2,12 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Events\FixtureStatusUpdate;
 use App\Models\Fixtures;
 use App\Models\Leagues;
 use App\Models\TextGenerator;
 use App\Services\WordpressService;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Casts\Json;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableStyle;
 use function Laravel\Prompts\error;
@@ -51,7 +51,7 @@ class ExportWordpress extends Command
         $this->registerCustomTableStyle();
         $headers = ['ID', 'Match', 'Updated At', 'WordPress'];
 
-//        try {
+        try {
             switch ($fixtureId) {
                 case 'all':
                     // Get all 'pending' generations and post to WordPress
@@ -71,7 +71,7 @@ class ExportWordpress extends Command
                     // Get specific 'pending' generated text for fixture and post it to WordPress
                     $fixture = Fixtures::all()->where('fixture_id', $fixtureId)->first();
                     $this->init($fixture);
-                    $posted = $this->processGeneration($fixture);
+                    $posted = $this->wordpressService->processGeneration($fixture);
 
                     if (isset($posted['report'])) {
                         $this->renderTable($headers, $posted['report']);
@@ -82,10 +82,11 @@ class ExportWordpress extends Command
                 default:
                     Log::channel('wordpress')->error("Invalid input");
             }
-//        } catch (\Throwable $exception) {
-//            Log::channel('wordpress')->error("$this->countryName | $this->leagueName | $this->round: $this->homeTeam - $this->awayTeam - #" . $fixtureId . $exception->getMessage());
-//            error("$this->countryName | $this->leagueName | $this->round: $this->homeTeam - $this->awayTeam - #" . $fixtureId . ' >>> ' . $exception->getMessage());
-//        }
+        } catch (\Throwable $exception) {
+            FixtureStatusUpdate::dispatch($fixture, 'FixturePublished', 11);
+            Log::channel('wordpress')->error("$this->countryName | $this->leagueName | $this->round: $this->homeTeam - $this->awayTeam - #" . $fixtureId . $exception->getMessage());
+            error("$this->countryName | $this->leagueName | $this->round: $this->homeTeam - $this->awayTeam - #" . $fixtureId . ' >>> ' . $exception->getMessage());
+        }
     }
 
     /**
@@ -106,51 +107,6 @@ class ExportWordpress extends Command
         }
         $this->homeTeam = $fixtureData[0]['teams']['home']['name'];
         $this->awayTeam = $fixtureData[0]['teams']['away']['name'];
-    }
-
-    /**
-     * @param Fixtures $fixture
-     * @return array
-     * @throws \Exception
-     */
-    public function processGeneration(Fixtures $fixture): array
-    {
-        $generation = TextGenerator::all()
-            ->where('fixture_id', $fixture->fixture_id)
-            ->where('status', TextGenerator::STATUS_PENDING)
-            ->first();
-        if (empty($generation)) {
-            Log::channel('wordpress')->warning($fixture->fixture_id . ' could not found any generation for export');
-            throw new \Exception(' could not found any generation for export');
-        }
-
-        $response = $this->wordpressService->export($fixture);
-        Log::channel('wordpress')->debug("#$fixture->fixture_id | $this->homeTeam - $this->awayTeam: WordPress response: " . JSON::encode($response));
-
-        // set generation to status=complete if OK
-        if (!empty($response) && isset($response['id']) && isset($response['link'])) {
-            $saveData = [
-                'fixture_id' => $fixture->fixture_id,
-                'url' => $response['link'],
-                'status' => TextGenerator::STATUS_COMPLETE
-            ];
-
-            if ($response['entity_type'] == $this->wordpressService::EXPORT_TYPE_PAGE) {
-                $saveData['page_id'] = $response['id'];
-            } elseif ($response['entity_type'] == $this->wordpressService::EXPORT_TYPE_POST) {
-                $saveData['post_id'] = $response['id'];
-            }
-
-            $this->generatorModel->store($saveData);
-
-            $postData['response'] = $response;
-            $postData['report']['ID'] = $fixture->fixture_id;
-            $postData['report']['Match'] = "$this->homeTeam - $this->awayTeam";
-            $postData['report']['Updated At'] = date('Y-m-d H:i:s');
-            $postData['report']['WordPress'] = "{$response['id']} - {$response['link']}";
-        }
-
-        return $postData;
     }
 
     /**

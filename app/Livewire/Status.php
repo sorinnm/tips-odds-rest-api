@@ -2,9 +2,11 @@
 
 namespace App\Livewire;
 
+use App\Events\FixturePublish;
 use App\Events\FixtureStatusUpdate;
 use App\Events\GenerationCheck;
 use App\Events\TemplateValidation;
+use App\Listeners\PublishFixture;
 use App\Models\Fixtures;
 use Illuminate\Support\Facades\Artisan;
 use Livewire\Component;
@@ -55,7 +57,7 @@ class Status extends Component
 
     public function fixturePublish()
     {
-        sleep(5);
+        FixturePublish::dispatch($this->fixture);
     }
 
     #[On('refresh-statuses')]

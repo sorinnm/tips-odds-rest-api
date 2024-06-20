@@ -112,7 +112,7 @@
                 </div>
             </form>
         @elseif($fixture->step == 11)
-            <form wire:submit="fixturePublishRetry">
+            <form wire:submit="fixturePublish">
                 <input id="fixturePublishRetry" type="hidden" wire:model="fixture" value="">
                 <button wire:loading.remove type="submit" class="btn btn-info">Retry</button>
                 <div wire:loading>
@@ -122,7 +122,7 @@
                 </div>
             </form>
         @elseif($fixture->step == 12)
-            <a href="#" target="_blank"><button type="button" class="btn btn-info">View</button></a>
+            <a href="{{ $fixture->generation->url }}" target="_blank"><button type="button" class="btn btn-info">View</button></a>
         @endif
     </div>
 </div>
