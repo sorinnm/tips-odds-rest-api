@@ -61,7 +61,7 @@ class ImportFixtures extends Command
                         ->where('is_active', true)->first();
 
                     if ($season) {
-                        try {
+//                        try {
                             $this->apiFootballService->init($league->api_football_id, $season->name);
                             // Import fixtures data for the current round
                             $data = $this->apiFootballService->importFixtures(
@@ -72,10 +72,10 @@ class ImportFixtures extends Command
                             if (empty($data)) {
                                 throw new \Exception('No data returned from API-Football');
                             }
-                        } catch (\Throwable $exception) {
-                            error("$countryName | $leagueName: " . $exception->getMessage());
-                            continue;
-                        }
+//                        } catch (\Throwable $exception) {
+//                            error("$countryName | $leagueName: " . $exception->getMessage());
+//                            continue;
+//                        }
 
                         $table = new Table($this->output);
                         $table->setHeaders($headers)

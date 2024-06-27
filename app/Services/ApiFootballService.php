@@ -55,18 +55,18 @@ class ApiFootballService
      * @return void
      * @throws Exception
      */
-    public function init(int $leagueId, int $seasonId, ?string $roundId): void
+    public function init(int $leagueId, int $seasonId, ?string $roundId = null): void
     {
         $this->leagueId = $leagueId;
         $this->seasonId = $seasonId;
 
         if (empty($roundId)) {
             $currentRound = $this->getCurrentRound($leagueId, $seasonId);
-
+            dd($currentRound);
             if (empty($currentRound)) {
                 throw new Exception('Round not found');
             }
-            $this->round = $this->getCurrentRound($leagueId, $seasonId)[0];
+            $this->round = $currentRound[0];
         } else {
             $this->round = $roundId;
         }
@@ -149,7 +149,7 @@ class ApiFootballService
             // Get home team squad and save
             $saved = false;
             $homeTeamSquad = $this->getSquads($homeTeamId);
-            $homeTeamLogo = $homeTeamSquad[0]['team']['logo'];
+            $homeTeamLogo = !empty($homeTeamSquad) ? $homeTeamSquad[0]['team']['logo'] : '';
             $homeTeamSquad = $this->cleanData($homeTeamSquad, self::DATA_TYPE_SQUADS);
             if (!empty($homeTeamSquad)) {
                 $saved = $this->fixtures->store([
@@ -214,7 +214,8 @@ class ApiFootballService
 
             // Get head to head and save
             $saved = false;
-            $head2head = $this->cleanData($this->getHeadToHead($fixtureId), self::DATA_TYPE_HEAD_TO_HEAD);
+            $head2head = $this->getHeadToHead($fixtureId);
+            $head2head = $head2head ? $this->cleanData($head2head, self::DATA_TYPE_HEAD_TO_HEAD) : null;
             if (!empty($head2head)) {
                 $saved = $this->fixtures->store([
                     'fixture_id' => $fixtureId,
