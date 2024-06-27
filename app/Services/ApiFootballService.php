@@ -62,7 +62,7 @@ class ApiFootballService
 
         if (empty($roundId)) {
             $currentRound = $this->getCurrentRound($leagueId, $seasonId);
-            dd($currentRound);
+            
             if (empty($currentRound)) {
                 throw new Exception('Round not found');
             }
